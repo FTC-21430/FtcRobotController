@@ -101,6 +101,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
             double drive = -gamepad1.left_stick_y;
             double slide = gamepad1.left_stick_x;
             double turn = gamepad1.right_stick_x;
+            boolean slowMode = gamepad1.left_bumper;
             //double turn  =  gamepad1.right_stick_x;
 
 
@@ -114,6 +115,12 @@ public class BasicOpMode_Linear extends LinearOpMode {
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
             //leftPower  = -gamepad1.left_stick_y ;
             //rightPower = -gamepad1.right_stick_y ;
+            if(slowMode){
+              leftFrontPower=leftFrontPower / 2;
+              leftBackPower = leftBackPower / 2;
+              rightFrontPower = rightFrontPower / 2;
+              rightBackPower = rightBackPower / 2;
+            }
 
             // Send calculated power to wheels
             leftFrontMotor.setPower(leftFrontPower);
