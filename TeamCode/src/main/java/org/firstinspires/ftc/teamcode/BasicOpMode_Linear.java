@@ -76,10 +76,10 @@ public class BasicOpMode_Linear extends LinearOpMode {
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        leftFrontMotor.setDirection(DcMotor.Direction.FORWARD);
-        leftBackMotor.setDirection(DcMotor.Direction.FORWARD);
-        rightFrontMotor.setDirection(DcMotor.Direction.REVERSE);
-        rightBackMotor.setDirection(DcMotor.Direction.REVERSE);
+        leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
+        leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
+        rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -99,15 +99,15 @@ public class BasicOpMode_Linear extends LinearOpMode {
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
             double drive = -gamepad1.left_stick_y;
-            double slide = -gamepad1.left_stick_x;
-            double turn = -gamepad1.right_stick_x;
+            double slide = gamepad1.left_stick_x;
+            double turn = gamepad1.right_stick_x;
             //double turn  =  gamepad1.right_stick_x;
 
 
-            leftFrontPower    =Range.clip(drive + slide - turn, -1.0, 1.0) ;
-            leftBackPower  =Range.clip(drive - slide - turn,-1.0, 1.0 );
-            rightFrontPower   =Range.clip(drive - slide + turn, -1.0, 1.0) ;
-            rightBackPower  =Range.clip(drive + slide + turn, -1.0, 1.0);
+            leftFrontPower    =Range.clip(drive + slide + turn, -1.0, 1.0) ;
+            leftBackPower  =Range.clip(drive - slide + turn,-1.0, 1.0 );
+            rightFrontPower   =Range.clip(drive - slide - turn, -1.0, 1.0) ;
+            rightBackPower  =Range.clip(drive + slide - turn, -1.0, 1.0);
 
 
             // Tank Mode uses one stick to control each wheel.
