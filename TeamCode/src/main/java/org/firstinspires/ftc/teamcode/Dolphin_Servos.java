@@ -57,7 +57,7 @@ public class Dolphin_Servos extends LinearOpMode {
     Servo   servoL;
     Servo   servoR;
 
-    double position_L = 0;
+    double position_L = 1;
     double position_R = 0;
 
     @Override
@@ -72,7 +72,8 @@ public class Dolphin_Servos extends LinearOpMode {
         telemetry.addData(">", "Press Start to scan Servo." );
         telemetry.update();
         waitForStart();
-
+        servoL.setPosition(1);
+        servoR.setPosition(0);
         // Scan servo till stop pressed.
         while(opModeIsActive()) {
 
@@ -85,18 +86,18 @@ public class Dolphin_Servos extends LinearOpMode {
             telemetry.addData("Servo Position", "%5.2f", position_R);
             telemetry.addData(">", "Press Stop to end test.");
             telemetry.update();
-
             if (stick == true) {
                 position_L =1;
                 position_R = 0;
             }
             if (stick == false) {
-                position_L = 0.76;
-                position_R = 0.18;
+               position_L = 0.85;
+                position_R = 0.150;
             }
 
 
-            // Set the servo to the new position and pause;
+
+             //Set the servo to the new position and pause;
             servoL.setPosition(position_L);
             servoR.setPosition(position_R);
 
@@ -105,7 +106,7 @@ public class Dolphin_Servos extends LinearOpMode {
 
 
         // Signal done;
-        telemetry.addData(">", "Done");
-        telemetry.update();
+       // telemetry.addData(">", "Done");
+        //telemetry.update();
     }
 }
