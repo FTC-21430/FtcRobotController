@@ -100,7 +100,7 @@ public class Autonomous_Route_Monkey_5 extends LinearOpMode {
         telemetry.update();
 
 
-        encoderDrive(0.85, 1, 1, 1, 1,5);
+        encoderDrive(0.85, 1.6, 1.6, -1.6, -1.6,5);
 
             //Sideways to the Right
 //        rightBackMotor.setPower(0.85);
@@ -110,7 +110,7 @@ public class Autonomous_Route_Monkey_5 extends LinearOpMode {
 //
 //        sleep(395);
 //
-        encoderDrive(0.35,1,1,1,1,5);
+        encoderDrive(0.35,0.9,0.9,0.9,0.9,5);
 //        //Forwards
 //        leftBackMotor.setPower(0.35);
 //        rightBackMotor.setPower(0.35);
@@ -128,7 +128,7 @@ public class Autonomous_Route_Monkey_5 extends LinearOpMode {
 //
 //        sleep(416);
 //
-        encoderDrive(0.85, -1, -1, 1, 1, 5);
+        encoderDrive(0.85, -3.8, -3.8, 3.8, 3.8, 5);
 //        //sideways to the Left
 //
 //        leftBackMotor.setPower(0.85);
@@ -153,10 +153,10 @@ public class Autonomous_Route_Monkey_5 extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newleftBackMotorTarget = leftBackMotor.getCurrentPosition() + (int)(leftFrontMotorFoot * COUNTS_PER_FOOT);
-            newletfFrontMotorTarget= leftFrontMotor.getCurrentPosition() + (int)(rightBackMotorFoot * COUNTS_PER_FOOT);
-            newrightFrontMotorTarget = rightFrontMotor.getCurrentPosition() + (int)(leftBackMotorFoot* COUNTS_PER_FOOT);
-            newrightBackMotorTarget = rightBackMotor.getCurrentPosition() + (int)(rightFrontMotorFoot * COUNTS_PER_FOOT);
+            newleftBackMotorTarget = leftBackMotor.getCurrentPosition() + (int)(leftBackMotorFoot * COUNTS_PER_FOOT);
+            newletfFrontMotorTarget= leftFrontMotor.getCurrentPosition() + (int)(leftFrontMotorFoot * COUNTS_PER_FOOT);
+            newrightFrontMotorTarget = rightFrontMotor.getCurrentPosition() + (int)(rightFrontMotorFoot* COUNTS_PER_FOOT);
+            newrightBackMotorTarget = rightBackMotor.getCurrentPosition() + (int)(rightBackMotorFoot * COUNTS_PER_FOOT);
 
 
             leftBackMotor.setTargetPosition(newleftBackMotorTarget);
