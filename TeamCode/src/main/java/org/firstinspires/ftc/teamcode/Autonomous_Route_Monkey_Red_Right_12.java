@@ -5,12 +5,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@Autonomous(name="Autonomous_Route_Monkey_5", group="Monkey")
-public class Autonomous_Route_Monkey_5 extends LinearOpMode {
+@Autonomous(name="Autonomous_Route_Monkey_Red_Right_12", group="Monkey")
+public class Autonomous_Route_Monkey_Red_Right_12 extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftFrontMotor = null;
