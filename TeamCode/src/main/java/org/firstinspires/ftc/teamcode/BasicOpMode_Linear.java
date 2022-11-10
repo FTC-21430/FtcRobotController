@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -59,7 +60,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
     private DcMotor leftBackMotor = null;
     private DcMotor rightFrontMotor = null;
     private DcMotor rightBackMotor = null;
-
+    Servo servoL;
+    Servo servoR;
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -80,13 +82,20 @@ public class BasicOpMode_Linear extends LinearOpMode {
         leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
         rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
         rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
-
+        double position_L = 1;
+        double position_R = 0;
+        servoL = hardwareMap.get(Servo.class, "left_hand");
+        servoR = hardwareMap.get(Servo.class, "right_hand");
+        servoL.setPosition(1);
+        servoR.setPosition(0);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+
+
 
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftFrontPower;
@@ -102,7 +111,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
             double slide = gamepad1.left_stick_x;
             double turn = gamepad1.right_stick_x;
             boolean slowMode = gamepad1.left_bumper;
-            //double turn  =  gamepad1.right_stick_x;
+            boolean stick = gamepad2.b;
+            //double turn  =  gamepad2.right_stick_x;
 
 
             leftFrontPower    =Range.clip(drive + slide + turn, -1.0, 1.0) ;
@@ -121,13 +131,23 @@ public class BasicOpMode_Linear extends LinearOpMode {
               rightFrontPower = rightFrontPower / 2;
               rightBackPower = rightBackPower / 2;
             }
+            if (stick == true) {
+                position_L =1;
+                position_R = 0;
+            }
+            if (stick == false) {
+                position_L = 0.85;
+                position_R = 0.150;
+            }
 
             // Send calculated power to wheels
             leftFrontMotor.setPower(leftFrontPower);
             leftBackMotor.setPower(leftBackPower);
             rightFrontMotor.setPower(rightFrontPower);
             rightBackMotor.setPower(rightBackPower);
-
+            //Set the servo to the new position and pause;
+            servoL.setPosition(position_L);
+            servoR.setPosition(position_R);
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftFrontPower, rightFrontPower);

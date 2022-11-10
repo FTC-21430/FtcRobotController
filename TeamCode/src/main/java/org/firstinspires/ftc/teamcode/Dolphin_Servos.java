@@ -48,67 +48,65 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@TeleOp(name = "Concept: Scan Servo otter", group = "Concept")
-public class elephant_otter_6_servo extends LinearOpMode {
+@TeleOp(name = "Concept: Scan Servo", group = "Concept")
+public class Dolphin_Servos extends LinearOpMode {
 
-    static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
-    static final int    CYCLE_MS    =   50;     // period of each cycle
-    static final double MAX_POS     =  1.0;     // Maximum rotational position
-    static final double MIN_POS     =  0.0;     // Minimum rotational position
+
 
     // Define class members
-    Servo   servo;
-    double  position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
-    boolean rampUp = true;
+    Servo   servoL;
+    Servo   servoR;
 
+    double position_L = 1;
+    double position_R = 0;
 
     @Override
     public void runOpMode() {
-
+        boolean stick = gamepad1.b;
         // Connect to servo (Assume Robot Left Hand)
         // Change the text in quotes to match any servo name on your robot.
-        servo = hardwareMap.get(Servo.class, "left_hand");
+        servoL = hardwareMap.get(Servo.class, "left_hand");
 
+        servoR = hardwareMap.get(Servo.class, "right_hand");
         // Wait for the start button
         telemetry.addData(">", "Press Start to scan Servo." );
         telemetry.update();
         waitForStart();
-
-
+        servoL.setPosition(1);
+        servoR.setPosition(0);
         // Scan servo till stop pressed.
-        while(opModeIsActive()){
+        while(opModeIsActive()) {
 
             // slew the servo, according to the rampUp (direction) variable.
-            if (rampUp) {
-                // Keep stepping up until we hit the max value.
-                position += INCREMENT ;
-                if (position >= MAX_POS ) {
-                    position = MAX_POS;
-                    rampUp = !rampUp;   // Switch ramp direction
-                }
-            }
-            else {
-                // Keep stepping down until we hit the min value.
-                position -= INCREMENT ;
-                if (position <= MIN_POS ) {
-                    position = MIN_POS;
-                    rampUp = !rampUp;  // Switch ramp direction
-                }
-            }
+            stick = gamepad1.b;
+
 
             // Display the current value
-            telemetry.addData("Servo Position", "%5.2f", position);
-            telemetry.addData(">", "Press Stop to end test." );
+            telemetry.addData("Servo Position", "%5.2f", position_L);
+            telemetry.addData("Servo Position", "%5.2f", position_R);
+            telemetry.addData(">", "Press Stop to end test.");
             telemetry.update();
+            if (stick == true) {
+                position_L =1;
+                position_R = 0;
+            }
+            if (stick == false) {
+               position_L = 0.85;
+                position_R = 0.150;
+            }
 
-            // Set the servo to the new position and pause;
-            servo.setPosition(position);
-            sleep(CYCLE_MS);
+
+
+             //Set the servo to the new position and pause;
+            servoL.setPosition(position_L);
+            servoR.setPosition(position_R);
+
             idle();
         }
 
+
         // Signal done;
-        telemetry.addData(">", "Done");
-        telemetry.update();
+       // telemetry.addData(">", "Done");
+        //telemetry.update();
     }
 }
