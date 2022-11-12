@@ -133,7 +133,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
             }
             if (stick == true) {
                 position_L =1;
-                position_R = 0;
+                position_R = 0; 
             }
             if (stick == false) {
                 position_L = 0.85;
