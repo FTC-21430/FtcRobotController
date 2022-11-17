@@ -60,6 +60,9 @@ public class BasicOpMode_Linear extends LinearOpMode {
     private DcMotor leftBackMotor = null;
     private DcMotor rightFrontMotor = null;
     private DcMotor rightBackMotor = null;
+    private DcMotor liftMotor = null;
+
+
     Servo servoL;
     Servo servoR;
     @Override
@@ -112,6 +115,13 @@ public class BasicOpMode_Linear extends LinearOpMode {
             double turn = gamepad1.right_stick_x;
             boolean slowMode = gamepad1.left_bumper;
             boolean stick = gamepad2.b;
+            boolean highJunction = gamepad1.dpad_up;
+            boolean mediumJunction = gamepad1.dpad_right;
+            boolean lowJunction = gamepad2.dpad_down;
+            boolean groundJunction = gamepad2.dpad_left;
+
+
+
             //double turn  =  gamepad2.right_stick_x;
 
 
@@ -120,6 +130,21 @@ public class BasicOpMode_Linear extends LinearOpMode {
             rightFrontPower   =Range.clip(drive - slide - turn, -1.0, 1.0) ;
             rightBackPower  =Range.clip(drive + slide - turn, -1.0, 1.0);
 
+
+            liftMotor.setTargetPosition(0);
+
+            if(groundJunction){
+                liftMotor.setTargetPosition(0);
+            }
+            if(lowJunction){
+                liftMotor.setTargetPosition(2095);
+            }
+            if(mediumJunction){
+                liftMotor.setTargetPosition(3619);
+            }
+            if(highJunction){
+                liftMotor.setTargetPosition(5334);
+            }
 
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
