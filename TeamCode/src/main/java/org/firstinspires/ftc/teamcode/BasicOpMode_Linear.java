@@ -113,12 +113,14 @@ public class BasicOpMode_Linear extends LinearOpMode {
             double drive = -gamepad1.left_stick_y;
             double slide = gamepad1.left_stick_x;
             double turn = gamepad1.right_stick_x;
-            boolean slowMode = gamepad1.left_bumper;
+            boolean slowMode = gamepad1.right_bumper;
             boolean stick = gamepad2.b;
-            boolean highJunction = gamepad1.dpad_up;
-            boolean mediumJunction = gamepad1.dpad_right;
+            boolean highJunction = gamepad2.dpad_up;
+            boolean mediumJunction = gamepad2.dpad_right;
             boolean lowJunction = gamepad2.dpad_down;
             boolean groundJunction = gamepad2.dpad_left;
+            float fastMode = gamepad1.right_trigger;
+
 
 
 
@@ -150,6 +152,43 @@ public class BasicOpMode_Linear extends LinearOpMode {
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
             //leftPower  = -gamepad1.left_stick_y ;
             //rightPower = -gamepad1.right_stick_y ;
+if(gamepad1.dpad_up){
+    leftFrontPower =1;
+    leftBackPower=1;
+    rightFrontPower=1;
+    rightBackPower=1;
+}
+            if(gamepad1.dpad_left){
+                leftFrontPower =-1;
+                leftBackPower=1;
+                rightFrontPower=1;
+                rightBackPower=-1;
+            }
+            if(gamepad1.dpad_right){
+                leftFrontPower =1;
+                leftBackPower=-1;
+                rightFrontPower=-1;
+                rightBackPower=1;
+            }
+            if(gamepad1.dpad_down){
+                leftFrontPower =-1;
+                leftBackPower=-1;
+                rightFrontPower=-1;
+                rightBackPower=-1;
+            }
+            leftFrontPower=leftFrontPower / 2;
+            leftBackPower = leftBackPower / 2;
+            rightFrontPower = rightFrontPower / 2;
+            rightBackPower = rightBackPower / 2;
+if(fastMode==1){
+    leftFrontPower=leftFrontPower * 2;
+    leftBackPower = leftBackPower * 2;
+    rightFrontPower = rightFrontPower * 2;
+    rightBackPower = rightBackPower * 2;
+}
+
+
+
             if(slowMode){
               leftFrontPower=leftFrontPower / 2;
               leftBackPower = leftBackPower / 2;
