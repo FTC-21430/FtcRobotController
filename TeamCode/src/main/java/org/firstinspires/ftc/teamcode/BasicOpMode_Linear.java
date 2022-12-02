@@ -62,6 +62,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
     private DcMotor rightBackMotor = null;
     private DcMotor liftMotor = null;
 
+    boolean rightPressed = false;
+
 
     Servo servoL;
     Servo servoR;
@@ -77,7 +79,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
         leftBackMotor = hardwareMap.get(DcMotor.class, "left_Back");
         rightFrontMotor = hardwareMap.get(DcMotor.class, "right_Front");
         rightBackMotor = hardwareMap.get(DcMotor.class,"right_Back");
-
+        liftMotor = hardwareMap.get(DcMotor.class,"liftMotor");
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -85,6 +87,10 @@ public class BasicOpMode_Linear extends LinearOpMode {
         leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
         rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
         rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
+        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setTargetPosition(0);
+
         double position_L = 1;
         double position_R = 0;
         servoL = hardwareMap.get(Servo.class, "left_hand");
@@ -132,20 +138,20 @@ public class BasicOpMode_Linear extends LinearOpMode {
             rightFrontPower   =Range.clip(drive - slide - turn, -1.0, 1.0) ;
             rightBackPower  =Range.clip(drive + slide - turn, -1.0, 1.0);
 
-
-            liftMotor.setTargetPosition(0);
+            liftMotor.setPower(Math.abs(0.7));
 
             if(groundJunction){
                 liftMotor.setTargetPosition(0);
             }
             if(lowJunction){
-                liftMotor.setTargetPosition(2095);
+                liftMotor.setTargetPosition(2300);
             }
             if(mediumJunction){
-                liftMotor.setTargetPosition(3619);
+                liftMotor.setTargetPosition(3700);
+                rightPressed = true;
             }
             if(highJunction){
-                liftMotor.setTargetPosition(5334);
+                liftMotor.setTargetPosition(5400);
             }
 
             // Tank Mode uses one stick to control each wheel.
@@ -216,6 +222,8 @@ if(fastMode==1){
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftFrontPower, rightFrontPower);
             telemetry.addData("Encoders", leftBackMotor.getCurrentPosition());
+            telemetry.addData(" lift Encoders", liftMotor.getCurrentPosition());
+            telemetry.addData("Right pressed", rightPressed);
             telemetry.update();
         }
     }
