@@ -87,9 +87,9 @@ public class BasicOpMode_Linear extends LinearOpMode {
         leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
         rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
         rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
+        liftMotor.setTargetPosition(0);
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setTargetPosition(0);
 
         double position_L = 1;
         double position_R = 0;
@@ -143,20 +143,21 @@ liftCurrent = liftMotor.getCurrentPosition();
             leftBackPower  =Range.clip(drive - slide + turn,-1.0, 1.0 );
             rightFrontPower   =Range.clip(drive - slide - turn, -1.0, 1.0) ;
             rightBackPower  =Range.clip(drive + slide - turn, -1.0, 1.0);
-if(liftManaulSET >= 5699){
-    liftManaulSET = 5750;
-}
-if (liftManaulSET < 50) {
-    liftManaulSET = 0;
-}
+
             liftMotor.setPower(Math.abs(0.8));
-if(liftManual = true){
+if(liftManual == true){
    if(gamepad2.dpad_up == true && oldLiftUp == false){
        liftManaulSET = liftCurrent+50;
+       if (liftManaulSET >= 6000) {
+           liftManaulSET = 6000;
+       }
        liftMotor.setTargetPosition(liftManaulSET);
    }
    if(gamepad2.dpad_down == true && oldLiftDown == false){
        liftManaulSET=liftCurrent-50;
+      if (liftManaulSET <= 0) {
+          liftManaulSET = 0;
+      }
        liftMotor.setTargetPosition(liftManaulSET);
    }
 } else {
