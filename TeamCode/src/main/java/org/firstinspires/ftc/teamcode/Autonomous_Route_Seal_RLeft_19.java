@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@Autonomous(name="Autonomous_Route_Monkey_Red_Left_20", group="Monkey")
-public class Autonomous_Route_Seal_Red_Left_19 extends LinearOpMode {
+@Autonomous(name="Autonomous_Route_Seal_RLeft_19", group="Monkey")
+public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftFrontMotor = null;
@@ -99,26 +99,26 @@ public class Autonomous_Route_Seal_Red_Left_19 extends LinearOpMode {
         telemetry.update();
 
 
-        encoderDrive(0.85, -1.6, -1.6, 1.6, 1.6,5);
+        encoderDrive(0.75, -0.35, -0.35, 0.35, 0.35,5);
 
-            //Sideways to the Right
+            //Sideways to the Left
 //        rightBackMotor.setPower(0.85);
 //        leftFrontMotor.setPower(0.85);
 //        leftBackMotor.setPower(-0.85);
 //        rightFrontMotor.setPower(-0.85);
 //
-//        sleep(395);
+//        sleep(10);
 //
-        encoderDrive(0.35,0.9,0.9,0.9,0.9,5);
+        encoderDrive(0.75,1.3,1.3,1.3,1.3,5);
 //        //Forwards
 //        leftBackMotor.setPower(0.35);
 //        rightBackMotor.setPower(0.35);
 //        rightFrontMotor.setPower(0.35);
 //        leftFrontMotor.setPower(0.35);
 //
-//        sleep(416);
+//        sleep(950);
 //
-        encoderDrive(-0.35,-1, -1, -1, -1, 5);
+        //encoderDrive(-0.35,-1, -1, -1, -1, 5);
 //        //Backwards
 //        leftBackMotor.setPower(-0.35);
 //        rightBackMotor.setPower(-0.35);
@@ -127,15 +127,15 @@ public class Autonomous_Route_Seal_Red_Left_19 extends LinearOpMode {
 //
 //        sleep(416);
 //
-        encoderDrive(0.85, -1.3, -1.3, 1.3, 1.3, 5);
-//        //sideways to the Left
+        encoderDrive(0.65, -2.9, 2.9, 2.9, -2.9, 5);
+//        //turn to the Right
 //
 //        leftBackMotor.setPower(-0.85);
 //        rightBackMotor.setPower(0.85);
 //        rightFrontMotor.setPower(-0.85);
 //        leftFrontMotor.setPower(0.85);
 //
-//        sleep(726);
+//        sleep(225);
 
         stop();
     }
