@@ -8,14 +8,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@Autonomous(name="Autonomous_Route_Monkey_Red_Left_20", group="Monkey")
-public class Autonomous_Route_Seal_Red_Left_19 extends LinearOpMode {
+@Autonomous(name="Autonomous_Route_Seal_RLeft_19", group="Monkey")
+public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftFrontMotor = null;
     private DcMotor leftBackMotor = null;
     private DcMotor rightFrontMotor = null;
     private DcMotor rightBackMotor = null;
+    private DcMotor liftMotor = null;
 
     @Override
     public void runOpMode() {
@@ -26,6 +27,7 @@ public class Autonomous_Route_Seal_Red_Left_19 extends LinearOpMode {
         leftBackMotor = hardwareMap.get(DcMotor.class, "left_Back");
         rightFrontMotor = hardwareMap.get(DcMotor.class, "right_Front");
         rightBackMotor = hardwareMap.get(DcMotor.class, "right_Back");
+        liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
 
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -35,11 +37,17 @@ public class Autonomous_Route_Seal_Red_Left_19 extends LinearOpMode {
         leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
         rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
         rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
+        liftMotor.setTargetPosition(0);
+        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 
         leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        liftMotor.setPower(0.8);
+
 
         waitForStart();
         runtime.reset();
@@ -99,43 +107,46 @@ public class Autonomous_Route_Seal_Red_Left_19 extends LinearOpMode {
         telemetry.update();
 
 
-        encoderDrive(0.85, -1.6, -1.6, 1.6, 1.6,5);
+        encoderDrive(0.75, -0.35, -0.35, 0.35, 0.35,5);
 
-            //Sideways to the Right
+            //Sideways to the Left
 //        rightBackMotor.setPower(0.85);
 //        leftFrontMotor.setPower(0.85);
 //        leftBackMotor.setPower(-0.85);
 //        rightFrontMotor.setPower(-0.85);
 //
-//        sleep(395);
+//        sleep(10);
 //
-        encoderDrive(0.35,0.9,0.9,0.9,0.9,5);
+        encoderDrive(0.75,2.0,2.0,2.0,2.0,5);
 //        //Forwards
 //        leftBackMotor.setPower(0.35);
 //        rightBackMotor.setPower(0.35);
 //        rightFrontMotor.setPower(0.35);
 //        leftFrontMotor.setPower(0.35);
 //
-//        sleep(416);
+//        sleep(845);
 //
-        encoderDrive(-0.35,-1, -1, -1, -1, 5);
+        //encoderDrive(-0.35,-1, -1, -1, -1, 5);
 //        //Backwards
 //        leftBackMotor.setPower(-0.35);
 //        rightBackMotor.setPower(-0.35);
 //        rightFrontMotor.setPower(-0.35);
 //        leftFrontMotor.setPower(-0.35);
 //
-//        sleep(416);
+        liftMotor.setTargetPosition(4000);
+
+        sleep(650);
 //
-        encoderDrive(0.85, -1.3, -1.3, 1.3, 1.3, 5);
-//        //sideways to the Left
+
+        encoderDrive(0.75, 0.92, 0.92, -0.92, -0.92, 5);
+//        //slide to the Right
 //
 //        leftBackMotor.setPower(-0.85);
 //        rightBackMotor.setPower(0.85);
 //        rightFrontMotor.setPower(-0.85);
 //        leftFrontMotor.setPower(0.85);
 //
-//        sleep(726);
+//        sleep(625);
 
         stop();
     }

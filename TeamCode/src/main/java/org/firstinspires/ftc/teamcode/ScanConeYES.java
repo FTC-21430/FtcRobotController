@@ -25,8 +25,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -36,7 +37,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 @TeleOp
-public class WebcamExample extends LinearOpMode
+public class ScanConeYES extends LinearOpMode
 {
     OpenCvWebcam webcam;
 
@@ -57,14 +58,16 @@ public class WebcamExample extends LinearOpMode
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
         // OR...  Do Not Activate the Camera Monitor View
+
         //webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"));
+       SamplePipeline pipeline =  new SamplePipeline();
 
         /*
          * Specify the image processing pipeline we wish to invoke upon receipt
          * of a frame from the camera. Note that switching pipelines on-the-fly
          * (while a streaming session is in flight) *IS* supported.
          */
-        webcam.setPipeline(new SamplePipeline());
+        webcam.setPipeline(pipeline);
 
         /*
          * Open the connection to the camera device. New in v1.4.0 is the ability
@@ -115,10 +118,21 @@ public class WebcamExample extends LinearOpMode
         /*
          * Wait for the user to press start on the Driver Station
          */
+        int Zone = 0;
         waitForStart();
 
         while (opModeIsActive())
         {
+            if (pipeline.getREDsum() >= pipeline.getBLUEsum() && pipeline.getREDsum() >= pipeline.getGREENsum()){
+                Zone = 1;
+            }
+            if (pipeline.getBLUEsum() >= pipeline.getREDsum() && pipeline.getBLUEsum() >= pipeline.getGREENsum()){
+                Zone = 2;
+            }
+            if (pipeline.getGREENsum() >= pipeline.getBLUEsum() && pipeline.getGREENsum() >= pipeline.getREDsum()){
+                Zone = 3;
+            }
+
             /*
              * Send some stats to the telemetry
              */
@@ -128,6 +142,10 @@ public class WebcamExample extends LinearOpMode
             telemetry.addData("Pipeline time ms", webcam.getPipelineTimeMs());
             telemetry.addData("Overhead time ms", webcam.getOverheadTimeMs());
             telemetry.addData("Theoretical max FPS", webcam.getCurrentPipelineMaxFps());
+            telemetry.addData("Red count", pipeline.getREDsum());
+            telemetry.addData("Blue count", pipeline.getBLUEsum());
+            telemetry.addData("Green count", pipeline.getGREENsum());
+            telemetry.addData("Zone", Zone);
             telemetry.update();
 
             /*
@@ -187,7 +205,9 @@ public class WebcamExample extends LinearOpMode
     class SamplePipeline extends OpenCvPipeline
     {
         boolean viewportPaused;
-
+Scalar REDsum = new Scalar(0);
+        Scalar BLUEsum = new Scalar(0);
+        Scalar GREENsum = new Scalar(0);
         /*
          * NOTE: if you wish to use additional Mat objects in your processing pipeline, it is
          * highly recommended to declare them here as instance variables and re-use them for
@@ -200,7 +220,7 @@ public class WebcamExample extends LinearOpMode
         @Override
         public Mat processFrame(Mat input)
         {
-            /*
+           Imgproc.cvtColor(input,input,Imgproc.COLOR_RGBA2RGB); /*
              * IMPORTANT NOTE: the input Mat that is passed in as a parameter to this method
              * will only dereference to the same image for the duration of this particular
              * invocation of this method. That is, if for some reason you'd like to save a copy
@@ -211,25 +231,47 @@ public class WebcamExample extends LinearOpMode
             /*
              * Draw a simple box around the middle 1/2 of the entire frame
              */
-            Imgproc.rectangle(
-                    input,
-                    new Point(
-                            input.cols()/4,
-                            input.rows()/4),
-                    new Point(
-                            input.cols()*(3f/4f),
-                            input.rows()*(3f/4f)),
-                    new Scalar(0, 255, 0), 4);
 
+
+           Mat cropped = new Mat(input,new Rect(140, 50, 70, 110));
             /**
              * NOTE: to see how to get data from your pipeline to your OpMode as well as how
              * to change which stage of the pipeline is rendered to the viewport when it is
              * tapped, please see {@link PipelineStageSwitchingExample}
              */
 
-            return input;
-        }
 
+
+Scalar low = new Scalar(130, 0, 0);
+Scalar high = new Scalar(255,80,80);
+Mat out = new Mat();
+            Core.inRange(cropped, low, high, out);
+            REDsum = Core.sumElems(out);
+
+            low = new Scalar(0, 0, 90);
+            high = new Scalar(80,80,255);
+            out = new Mat();
+            Core.inRange(cropped, low, high, out);
+            BLUEsum = Core.sumElems(out);
+
+             low = new Scalar(0, 81, 0);
+             high = new Scalar(80,255,80);
+             out = new Mat();
+            Core.inRange(cropped, low, high, out);
+            GREENsum = Core.sumElems(out);
+
+
+            return out;
+        }
+public double getREDsum(){
+            return REDsum.val[0] / 255;
+}
+        public double getBLUEsum(){
+            return BLUEsum.val[0] / 255;
+        }
+        public double getGREENsum(){
+            return GREENsum.val[0] / 255;
+        }
         @Override
         public void onViewportTapped()
         {
