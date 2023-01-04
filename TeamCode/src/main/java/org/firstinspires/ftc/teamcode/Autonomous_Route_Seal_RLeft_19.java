@@ -5,6 +5,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -18,6 +19,11 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
     private DcMotor rightBackMotor = null;
     private DcMotor liftMotor = null;
 
+
+    Servo servoL;
+    Servo servoR;
+
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -28,6 +34,11 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
         rightFrontMotor = hardwareMap.get(DcMotor.class, "right_Front");
         rightBackMotor = hardwareMap.get(DcMotor.class, "right_Back");
         liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
+        double postion_L = 1;
+        double postion_R = 1;
+
+        servoL = hardwareMap.get(Servo.class, "left_hand");
+        servoR = hardwareMap.get(Servo.class, "right_hand");
 
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -40,6 +51,8 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
         liftMotor.setTargetPosition(0);
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        servoL.setPosition((0.85));
+        servoR.setPosition((0.85));
 
 
         leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -51,6 +64,7 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
 
         waitForStart();
         runtime.reset();
+        //L=0.85 R=0.15 is open and L=0 R=1 is closed
 
         double leftFrontPower;
         double leftBackPower;
@@ -64,50 +78,27 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
         // - This uses basic math to combine motions and is easier to drive straight.
         // POV Mode uses left stick to go forward, and right stick to turn.
         // - This uses basic math to combine motions and is easier to drive straight.
-        double drive = -gamepad1.left_stick_y;
-        double slide = gamepad1.left_stick_x;
-        double turn = gamepad1.right_stick_x;
-        boolean slowMode = gamepad1.left_bumper;
-        //double turn  =  gamepad1.right_stick_x;
+
+        servoL.setPosition(0);
+        servoR.setPosition(1);
 
         //Power Source
-        leftFrontPower = Range.clip(drive + slide + turn, -1.0, 1.0);
-        leftBackPower = Range.clip(drive - slide + turn, -1.0, 1.0);
-        rightFrontPower = Range.clip(drive - slide - turn, -1.0, 1.0);
-        rightBackPower = Range.clip(drive + slide - turn, -1.0, 1.0);
-
-        if (slowMode) {
-            leftFrontPower = leftFrontPower / 2;
-            leftBackPower = leftBackPower / 2;
-            rightFrontPower = rightFrontPower / 2;
-            rightBackPower = rightBackPower / 2;
-        }
-
-        // Tank Mode uses one stick to control each wheel.
-        // - This requires no math, but it is hard to drive forward slowly and keep straight.
-        //leftPower  = -gamepad1.left_stick_y ;
-        //rightPower = -gamepad1.right_stick_y ;
-        if (slowMode) {
-            leftFrontPower = leftFrontPower / 2;
-            leftBackPower = leftBackPower / 2;
-            rightFrontPower = rightFrontPower / 2;
-            rightBackPower = rightBackPower / 2;
 
 
-            // Send calculated power to wheels
-            leftFrontMotor.setPower(leftFrontPower);
-            leftBackMotor.setPower(leftBackPower);
-            rightFrontMotor.setPower(rightFrontPower);
-            rightBackMotor.setPower(rightBackPower);
 
-        }
+
+
+
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftFrontPower, rightFrontPower, leftBackPower, rightBackPower);
+
         telemetry.update();
 
 
+
+
         encoderDrive(0.75, -0.35, -0.35, 0.35, 0.35,5);
+        liftMotor.setTargetPosition(4400);
 
             //Sideways to the Left
 //        rightBackMotor.setPower(0.85);
@@ -133,22 +124,33 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
 //        rightFrontMotor.setPower(-0.35);
 //        leftFrontMotor.setPower(-0.35);
 //
-        liftMotor.setTargetPosition(4000);
-
-        sleep(650);
 //
 
-        encoderDrive(0.75, 0.92, 0.92, -0.92, -0.92, 5);
+        encoderDrive(0.75, 1.1, 1.1, -1.1, -1.1, 5);
 //        //slide to the Right
 //
 //        leftBackMotor.setPower(-0.85);
 //        rightBackMotor.setPower(0.85);
 //        rightFrontMotor.setPower(-0.85);
 //        leftFrontMotor.setPower(0.85);
-//
-//        sleep(625);
+        encoderDrive(0.3, 0.7,0.7,0.7,0.7,5 );
+        sleep(500);
+        servoL.setPosition(1);
+        servoR.setPosition(0);
 
+
+//        sleep(625);
+        sleep(200);
+        encoderDrive(0.3, -0.65,-0.65,-0.65,-0.65,5 );
+      sleep(200);
+        servoL.setPosition(0.85);
+      servoR.setPosition(0.15);
+      liftMotor.setTargetPosition(0);
+        encoderDrive(0.75, -1.5, -1.5, 1.5, 1.5, 5);
+        encoderDrive(0.3, 0.65,0.65,0.65,0.65,5 );
+      sleep( 3000);
         stop();
+
     }
     static final double     COUNTS_PER_FOOT  =  546.4480;
     public void encoderDrive(double speed,
