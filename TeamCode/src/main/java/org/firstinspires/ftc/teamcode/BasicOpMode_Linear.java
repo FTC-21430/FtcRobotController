@@ -140,18 +140,23 @@ public class BasicOpMode_Linear extends LinearOpMode {
 
 liftCurrent = liftMotor.getCurrentPosition();
 
-            leftFrontPower    =Range.clip(drive + slide + turn, -1.0, 1.0) ;
+
+
+            leftFrontPower =Range.clip(drive + slide + turn, -1.0, 1.0);
             leftBackPower  =Range.clip(drive - slide + turn,-1.0, 1.0 );
-            rightFrontPower   =Range.clip(drive - slide - turn, -1.0, 1.0) ;
-            rightBackPower  =Range.clip(drive + slide - turn, -1.0, 1.0);
-if(liftManaulSET >= 5699){
+            rightFrontPower=Range.clip(drive - slide - turn, -1.0, 1.0);
+            rightBackPower =Range.clip(drive + slide - turn, -1.0, 1.0);
+
+
+
+            if(liftManaulSET >= 5699){
     liftManaulSET = 5750;
 }
 if (liftManaulSET < 50) {
     liftManaulSET = 0;
 }
             liftMotor.setPower(Math.abs(0.8));
-if(liftManual = true){
+if(liftManual == true){
    if(gamepad2.dpad_up == true && oldLiftUp == false){
        liftManaulSET = liftCurrent+50;
        liftMotor.setTargetPosition(liftManaulSET);

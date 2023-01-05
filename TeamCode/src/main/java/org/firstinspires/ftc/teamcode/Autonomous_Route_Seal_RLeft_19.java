@@ -134,20 +134,21 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
 //        rightFrontMotor.setPower(-0.85);
 //        leftFrontMotor.setPower(0.85);
         encoderDrive(0.3, 0.7,0.7,0.7,0.7,5 );
-        sleep(500);
+        sleep(50);
         servoL.setPosition(1);
         servoR.setPosition(0);
 
 
 //        sleep(625);
-        sleep(200);
+        sleep(700);
         encoderDrive(0.3, -0.65,-0.65,-0.65,-0.65,5 );
       sleep(200);
         servoL.setPosition(0.85);
       servoR.setPosition(0.15);
-      liftMotor.setTargetPosition(0);
+      liftMotor.setTargetPosition(1000);
         encoderDrive(0.75, -1.5, -1.5, 1.5, 1.5, 5);
-        encoderDrive(0.3, 0.65,0.65,0.65,0.65,5 );
+        encoderDrive(0.3, 1.5,1.5,1.5,1.5,5 );
+
       sleep( 3000);
         stop();
 
