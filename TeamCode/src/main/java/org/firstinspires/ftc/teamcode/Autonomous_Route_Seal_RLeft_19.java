@@ -59,7 +59,7 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
         rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        liftMotor.setPower(0.8);
+        liftMotor.setPower(0.3);
 
 
         waitForStart();
@@ -98,7 +98,7 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
 
 
         encoderDrive(0.75, -0.35, -0.35, 0.35, 0.35,5);
-        liftMotor.setTargetPosition(4400);
+        liftMotor.setTargetPosition(1344);
 
             //Sideways to the Left
 //        rightBackMotor.setPower(0.85);
@@ -145,7 +145,7 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
       sleep(200);
         servoL.setPosition(0.85);
       servoR.setPosition(0.15);
-      liftMotor.setTargetPosition(1000);
+      liftMotor.setTargetPosition(306);
         encoderDrive(0.75, -1.5, -1.5, 1.5, 1.5, 5);
         encoderDrive(0.3, 1.5,1.5,1.5,1.5,5 );
 

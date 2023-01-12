@@ -155,7 +155,7 @@ liftCurrent = liftMotor.getCurrentPosition();
 if (liftManaulSET < 50) {
     liftManaulSET = 0;
 }
-            liftMotor.setPower(Math.abs(0.8));
+            liftMotor.setPower(Math.abs(0.3));
 if(liftManual == true){
    if(gamepad2.dpad_up == true && oldLiftUp == false){
        liftManaulSET = liftCurrent+50;
@@ -170,14 +170,14 @@ if(liftManual == true){
         liftMotor.setTargetPosition(0);
     }
     if (lowJunction) {
-        liftMotor.setTargetPosition(2600);
+        liftMotor.setTargetPosition(794);
     }
     if (mediumJunction) {
-        liftMotor.setTargetPosition(4000);
+        liftMotor.setTargetPosition(1222);
         rightPressed = true;
     }
     if (highJunction) {
-        liftMotor.setTargetPosition(5700);
+        liftMotor.setTargetPosition(1741);
     }
 }
             // Tank Mode uses one stick to control each wheel.
