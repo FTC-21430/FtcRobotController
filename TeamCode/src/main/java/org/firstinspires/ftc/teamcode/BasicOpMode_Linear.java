@@ -171,13 +171,16 @@ if(liftManual == true){
     }
     if (lowJunction) {
         liftMotor.setTargetPosition(794);
+        //liftMotor.setTargetPosition(2600);
     }
     if (mediumJunction) {
         liftMotor.setTargetPosition(1222);
+       // liftMotor.setTargetPosition(4000);
         rightPressed = true;
     }
     if (highJunction) {
         liftMotor.setTargetPosition(1741);
+        //liftMotor.setTargetPosition(5700);
     }
 }
             // Tank Mode uses one stick to control each wheel.
