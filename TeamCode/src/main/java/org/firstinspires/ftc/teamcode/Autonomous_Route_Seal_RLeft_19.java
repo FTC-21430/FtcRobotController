@@ -9,6 +9,18 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvPipeline;
+import org.openftc.easyopencv.OpenCvWebcam;
+
 @Autonomous(name="Autonomous_Route_Seal_RLeft_19", group="Monkey")
 public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
     // Declare OpMode members.
@@ -18,6 +30,7 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
     private DcMotor rightFrontMotor = null;
     private DcMotor rightBackMotor = null;
     private DcMotor liftMotor = null;
+    OpenCvWebcam webcam;
 
 
     Servo servoL;
@@ -28,6 +41,26 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        Autonomous_Route_Seal_RLeft_19.SamplePipeline pipeline =  new Autonomous_Route_Seal_RLeft_19.SamplePipeline();
+        webcam.setPipeline(pipeline);
+        webcam.setMillisecondsPermissionTimeout(2500); // Timeout for obtaining permission is configurable. Set before opening.
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+
+                webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode)
+            {
+
+            }
+        });
         // Initialize the hardware variables. Note that the strings used here as parameters
         leftFrontMotor = hardwareMap.get(DcMotor.class, "left_Front");
         leftBackMotor = hardwareMap.get(DcMotor.class, "left_Back");
@@ -70,8 +103,19 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
         double leftBackPower;
         double rightFrontPower;
         double rightBackPower;
-        float ZONE = 1;
-
+        int Zone = 0;
+        if (pipeline.getREDsum() >= pipeline.getBLUEsum() && pipeline.getREDsum() >= pipeline.getGREENsum()){
+            Zone = 1;
+        }
+        if (pipeline.getBLUEsum() >= pipeline.getREDsum() && pipeline.getBLUEsum() >= pipeline.getGREENsum()){
+            Zone = 2;
+        }
+        if (pipeline.getGREENsum() >= pipeline.getBLUEsum() && pipeline.getGREENsum() >= pipeline.getREDsum()){
+            Zone = 3;
+        }
+        telemetry.addData("Zone", Zone);
+        telemetry.update();
+        sleep(2000);
         // Choose to drive using either Tank Mode, or POV Mode
         // Comment out the method that's not used.  The default below is POV.
 
@@ -130,9 +174,9 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
 //        rightFrontMotor.setPower(-0.85);
 //        leftFrontMotor.setPower(0.85);
         liftMotor.setTargetPosition(1800);
-        sleep(5000);
+        sleep(2000);
         encoderDrive(0.3, 0.6,0.6,0.6,0.6,5 );
-        sleep(5000);
+        sleep(2000);
         stop();
 
         servoL.setPosition(0.81);
@@ -150,13 +194,13 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
         // encoderDrive(0.75, -1.5, -1.5, 1.5, 1.5, 5);
         //encoderDrive(0.3, 1.5,1.5,1.5,1.5,5 );
         stop();
-        if (ZONE==1){
+        if (Zone==1){
             //move to zone 1
         }
-        if(ZONE==2){
+        if(Zone==2){
             //move to zone2
         }
-        if (ZONE==3 ){
+        if (Zone==3 ){
             //move to zone 3
         }
         sleep( 3000);
@@ -231,6 +275,114 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
             rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             sleep(250);   // optional pause after each move.
+        }
+    }
+    class SamplePipeline extends OpenCvPipeline
+    {
+        boolean viewportPaused;
+        Scalar REDsum = new Scalar(0);
+        Scalar REDsecondsum = new Scalar(0);
+        Scalar BLUEsum = new Scalar(0);
+        Scalar GREENsum = new Scalar(0);
+        double[] midPixel = new double[3];
+
+
+        /*
+         * NOTE: if you wish to use additional Mat objects in your processing pipeline, it is
+         * highly recommended to declare them here as instance variables and re-use them for
+         * each invocation of processFrame(), rather than declaring them as new local variables
+         * each time through processFrame(). This removes the danger of causing a memory leak
+         * by forgetting to call mat.release(), and it also reduces memory pressure by not
+         * constantly allocating and freeing large chunks of memory.
+         */
+
+        @Override
+        public Mat processFrame(Mat input)
+        {
+            Imgproc.cvtColor(input,input,Imgproc.COLOR_RGBA2RGB); /*
+             * IMPORTANT NOTE: the input Mat that is passed in as a parameter to this method
+             * will only dereference to the same image for the duration of this particular
+             * invocation of this method. That is, if for some reason you'd like to save a copy
+             * of this particular frame for later use, you will need to either clone it or copy
+             * it to another Mat.
+             */
+
+            /*
+             * Draw a simple box around the middle 1/2 of the entire frame
+             */
+
+
+            Mat cropped = new Mat(input,new Rect(245, 228,100 , 150));
+
+            Imgproc.cvtColor(cropped,cropped,Imgproc.COLOR_RGB2HSV);
+            midPixel = cropped.get(50,75);
+
+            /**
+             * NOTE: to see how to get data from your pipeline to your OpMode as well as how
+             * to change which stage of the pipeline is rendered to the viewport when it is
+             * tapped, please see {@link PipelineStageSwitchingExample}
+             */
+
+
+
+            Scalar low = new Scalar(0, 127, 51);
+            Scalar high = new Scalar(20,255,255);
+            Mat out = new Mat();
+            Core.inRange(cropped, low, high, out);
+            REDsum = Core.sumElems(out);
+
+            low = new Scalar(160, 100, 51);
+            high = new Scalar(180,255,255);
+            out = new Mat();
+            Core.inRange(cropped, low, high, out);
+            REDsecondsum =Core.sumElems(out);
+
+            low = new Scalar(100, 120, 51);
+            high = new Scalar(140,255,255);
+            out = new Mat();
+            Core.inRange(cropped, low, high, out);
+            BLUEsum = Core.sumElems(out);
+
+            low = new Scalar(60, 127, 51);
+            high = new Scalar(100,255,255);
+            out = new Mat();
+            Core.inRange(cropped, low, high, out);
+            GREENsum = Core.sumElems(out);
+
+
+            return cropped;
+        }
+        public double getREDsum(){return (REDsum.val[0] / 255)+(REDsecondsum.val[0]/255) ;}
+        public double getBLUEsum(){return BLUEsum.val[0] / 255;}
+        public double getGREENsum(){return GREENsum.val[0] / 255;}
+        public double getMidH(){return midPixel[0];}
+        public double getMidS(){return midPixel[1];}
+        public double getMidV(){return midPixel[2];}
+        @Override
+        public void onViewportTapped()
+        {
+            /*
+             * The viewport (if one was specified in the constructor) can also be dynamically "paused"
+             * and "resumed". The primary use case of this is to reduce CPU, memory, and power load
+             * when you need your vision pipeline running, but do not require a live preview on the
+             * robot controller screen. For instance, this could be useful if you wish to see the live
+             * camera preview as you are initializing your robot, but you no longer require the live
+             * preview after you have finished your initialization process; pausing the viewport does
+             * not stop running your pipeline.
+             *
+             * Here we demonstrate dynamically pausing/resuming the viewport when the user taps it
+             */
+
+            viewportPaused = !viewportPaused;
+
+            if(viewportPaused)
+            {
+                webcam.pauseViewport();
+            }
+            else
+            {
+                webcam.resumeViewport();
+            }
         }
     }
 }
