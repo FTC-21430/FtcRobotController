@@ -99,7 +99,9 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
 
 
         encoderDrive(0.5, 1.8, 1.8, -1.8, -1.8,5);
-            //Sideways to the Right
+
+
+        //Sideways to the Right
 //        rightBackMotor.setPower(0.85);
 //        leftFrontMotor.setPower(0.85);
 //        leftBackMotor.setPower(-0.85);
@@ -115,6 +117,10 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
 //        leftFrontMotor.setPower(0.35);
 //
 //        sleep(845);
+//
+
+//
+//
 
         encoderDrive(0.5, 1.4, 1.4, -1.4, -1.4, 5);
 //        //slide to the Right
@@ -123,42 +129,37 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
 //        rightBackMotor.setPower(0.85);
 //        rightFrontMotor.setPower(-0.85);
 //        leftFrontMotor.setPower(0.85);
-        liftMotor.setTargetPosition(1741);
+        liftMotor.setTargetPosition(1800);
         sleep(5000);
         encoderDrive(0.3, 0.6,0.6,0.6,0.6,5 );
-        //forwards
+        sleep(5000);
+        stop();
 
-        servoL.setPosition(0.81);
-        servoR.setPosition(0.312);
-        encoderDrive(0.75,2.0,2.0,2.0,2.0,5);
-
-//        sleep(625);
-
-        sleep(700);
         servoL.setPosition(0.81);
         servoR.setPosition(0.312);
         //open
-        encoderDrive(0.5,-0.54, -0.54, -0.54, -0.54, 5);
-//        Backwards
+        encoderDrive(0.5, -0.54,-0.54,-0.54,-0.54,5 );
 
+
+//        sleep(625);
         sleep(700);
-        servoL.setPosition((0.65));
+        servoL.setPosition(0.65);
         servoR.setPosition(0.40);
         //closed
         liftMotor.setTargetPosition(0);
-        //   encoderDrive(0.75, -1.5, -1.5, 1.5, 1.5, 5);
-        // encoderDrive(0.3, 1.5,1.5,1.5,1.5,5 );
+        // encoderDrive(0.75, -1.5, -1.5, 1.5, 1.5, 5);
+        //encoderDrive(0.3, 1.5,1.5,1.5,1.5,5 );
         stop();
-if (ZONE==1){
-    //move to zone 1
-}
-if(ZONE==2){
-    //move to zone2
-}
-if (ZONE==3 ){
-    //move to zone 3
-}
-      sleep( 3000);
+        if (ZONE==1){
+            //move to zone 1
+        }
+        if(ZONE==2){
+            //move to zone2
+        }
+        if (ZONE==3 ){
+            //move to zone 3
+        }
+        sleep( 3000);
         stop();
 
     }
