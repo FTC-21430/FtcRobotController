@@ -23,9 +23,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.vuforia.Vec3F;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
@@ -100,7 +102,7 @@ public class ScanConeYES extends LinearOpMode
                  * For a rear facing camera or a webcam, rotation is defined assuming the camera is facing
                  * away from the user.
                  */
-                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -145,6 +147,9 @@ public class ScanConeYES extends LinearOpMode
             telemetry.addData("Red count", pipeline.getREDsum());
             telemetry.addData("Blue count", pipeline.getBLUEsum());
             telemetry.addData("Green count", pipeline.getGREENsum());
+            telemetry.addData("MIDDLEH",pipeline.getMidH());
+            telemetry.addData("MIDDLES",pipeline.getMidS());
+            telemetry.addData("MIDDLEV",pipeline.getMidV());
             telemetry.addData("Zone", Zone);
             telemetry.update();
 
@@ -206,8 +211,12 @@ public class ScanConeYES extends LinearOpMode
     {
         boolean viewportPaused;
 Scalar REDsum = new Scalar(0);
+Scalar REDsecondsum = new Scalar(0);
         Scalar BLUEsum = new Scalar(0);
         Scalar GREENsum = new Scalar(0);
+        double[] midPixel = new double[3];
+
+
         /*
          * NOTE: if you wish to use additional Mat objects in your processing pipeline, it is
          * highly recommended to declare them here as instance variables and re-use them for
@@ -233,7 +242,11 @@ Scalar REDsum = new Scalar(0);
              */
 
 
-           Mat cropped = new Mat(input,new Rect(140, 50, 70, 110));
+           Mat cropped = new Mat(input,new Rect(245, 228,100 , 150));
+
+            Imgproc.cvtColor(cropped,cropped,Imgproc.COLOR_RGB2HSV);
+            midPixel = cropped.get(50,75);
+
             /**
              * NOTE: to see how to get data from your pipeline to your OpMode as well as how
              * to change which stage of the pipeline is rendered to the viewport when it is
@@ -242,36 +255,39 @@ Scalar REDsum = new Scalar(0);
 
 
 
-Scalar low = new Scalar(130, 0, 0);
-Scalar high = new Scalar(255,80,80);
+Scalar low = new Scalar(0, 127, 51);
+Scalar high = new Scalar(20,255,255);
 Mat out = new Mat();
             Core.inRange(cropped, low, high, out);
             REDsum = Core.sumElems(out);
 
-            low = new Scalar(0, 0, 90);
-            high = new Scalar(80,80,255);
+            low = new Scalar(160, 100, 51);
+            high = new Scalar(180,255,255);
+            out = new Mat();
+            Core.inRange(cropped, low, high, out);
+            REDsecondsum =Core.sumElems(out);
+
+            low = new Scalar(100, 120, 51);
+            high = new Scalar(140,255,255);
             out = new Mat();
             Core.inRange(cropped, low, high, out);
             BLUEsum = Core.sumElems(out);
 
-             low = new Scalar(0, 81, 0);
-             high = new Scalar(80,255,80);
+             low = new Scalar(60, 127, 51);
+             high = new Scalar(100,255,255);
              out = new Mat();
             Core.inRange(cropped, low, high, out);
             GREENsum = Core.sumElems(out);
 
 
-            return out;
+            return cropped;
         }
-public double getREDsum(){
-            return REDsum.val[0] / 255;
-}
-        public double getBLUEsum(){
-            return BLUEsum.val[0] / 255;
-        }
-        public double getGREENsum(){
-            return GREENsum.val[0] / 255;
-        }
+        public double getREDsum(){return (REDsum.val[0] / 255)+(REDsecondsum.val[0]/255) ;}
+        public double getBLUEsum(){return BLUEsum.val[0] / 255;}
+        public double getGREENsum(){return GREENsum.val[0] / 255;}
+        public double getMidH(){return midPixel[0];}
+        public double getMidS(){return midPixel[1];}
+        public double getMidV(){return midPixel[2];}
         @Override
         public void onViewportTapped()
         {
