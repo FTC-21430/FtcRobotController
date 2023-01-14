@@ -70,6 +70,7 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
         double leftBackPower;
         double rightFrontPower;
         double rightBackPower;
+        float ZONE = 1;
 
         // Choose to drive using either Tank Mode, or POV Mode
         // Comment out the method that's not used.  The default below is POV.
@@ -148,7 +149,15 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
       liftMotor.setTargetPosition(306);
         encoderDrive(0.75, -1.5, -1.5, 1.5, 1.5, 5);
         encoderDrive(0.3, 1.5,1.5,1.5,1.5,5 );
-
+if (ZONE==1){
+    //move to zone 1
+}
+if(ZONE==2){
+    //move to zone2
+}
+if (ZONE==3 ){
+    //move to zone 3
+}
       sleep( 3000);
         stop();
 
