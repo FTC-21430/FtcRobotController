@@ -96,8 +96,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
         double position_R = 0;
         servoL = hardwareMap.get(Servo.class, "left_hand");
         servoR = hardwareMap.get(Servo.class, "right_hand");
-        servoL.setPosition(1);
-        servoR.setPosition(0);
+        servoL.setPosition(0.72);
+        servoR.setPosition(0.33);
         // Wait for the game to start (driver presses PLAY)
         int liftManaulSET = 0;
         waitForStart();
@@ -155,7 +155,7 @@ liftCurrent = liftMotor.getCurrentPosition();
 if (liftManaulSET < 50) {
     liftManaulSET = 0;
 }
-            liftMotor.setPower(Math.abs(0.3));
+            liftMotor.setPower(Math.abs(1));
 if(liftManual == true){
    if(gamepad2.dpad_up == true && oldLiftUp == false){
        liftManaulSET = liftCurrent+50;
@@ -233,12 +233,12 @@ if(fastMode==1){
               rightBackPower = rightBackPower / 2;
             }
             if (stick == true) {
-                position_L =1;
-                position_R = 0; 
+                position_L =0.81;
+                position_R = 0.312;
             }
             if (stick == false) {
-                position_L = 0.85;
-                position_R = 0.150;
+                position_L = 0.7;
+                position_R = 0.38;
             }
 
             // Send calculated power to wheels
