@@ -148,10 +148,12 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
 
         sleep(50);
         liftMotor.setTargetPosition(1741);
-        servoL.setPosition(1);
-        servoR.setPosition(0);
+        //Grabber Open
         servoL.setPosition(0.81);
-        servoR.setPosition(0.15);
+        servoR.setPosition(0.312);
+        //Grabber Closed
+        servoL.setPosition(0.7);
+        servoR.setPosition(0.38);
 
         encoderDrive(0.75,2.0,2.0,2.0,2.0,5);
 
@@ -162,7 +164,7 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
         liftMotor.setTargetPosition(0);
         servoL.setPosition(0.81);
         servoR.setPosition(0.15);
-         encoderDrive(-0.35,-1, -1, -1, -1, 5);
+         encoderDrive(-0.35,-0.54, -0.54, -0.54, -0.54, 5);
 //        //Backwards
 //        leftBackMotor.setPower(-0.35);
 //        rightBackMotor.setPower(-0.35);
