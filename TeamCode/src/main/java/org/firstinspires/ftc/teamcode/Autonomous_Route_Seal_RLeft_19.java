@@ -98,10 +98,10 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
 
 
 
-        encoderDrive(0.75, -0.35, -0.35, 0.35, 0.35,5);
+        encoderDrive(0.75, 1.58, 1.58, -1.58, -1.58,5);
         liftMotor.setTargetPosition(1344);
 
-            //Sideways to the Left
+            //Sideways to the Right
 //        rightBackMotor.setPower(0.85);
 //        leftFrontMotor.setPower(0.85);
 //        leftBackMotor.setPower(-0.85);
@@ -109,7 +109,7 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
 //
 //        sleep(10);
 //
-        encoderDrive(0.75,2.0,2.0,2.0,2.0,5);
+        encoderDrive(0.75,2.33,2.33,2.33,2.33,5);
 //        //Forwards
 //        leftBackMotor.setPower(0.35);
 //        rightBackMotor.setPower(0.35);
@@ -127,26 +127,47 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
 //
 //
 
-        encoderDrive(0.75, 1.1, 1.1, -1.1, -1.1, 5);
+        encoderDrive(0.75, 1.08, 1.08, -1.08, -1.08, 5);
 //        //slide to the Right
 //
 //        leftBackMotor.setPower(-0.85);
 //        rightBackMotor.setPower(0.85);
 //        rightFrontMotor.setPower(-0.85);
 //        leftFrontMotor.setPower(0.85);
-        encoderDrive(0.3, 0.7,0.7,0.7,0.7,5 );
+
+        liftMotor.setTargetPosition(1741);
+
+        encoderDrive(0.3, 0.54,0.54,0.54,0.54,5 );
+
+        //forward
+
+
+
+
+
+
         sleep(50);
+        liftMotor.setTargetPosition(1741);
         servoL.setPosition(1);
         servoR.setPosition(0);
+        servoL.setPosition(0.81);
+        servoR.setPosition(0.15);
 
+        encoderDrive(0.75,2.0,2.0,2.0,2.0,5);
 
 //        sleep(625);
         sleep(700);
         encoderDrive(0.3, -0.65,-0.65,-0.65,-0.65,5 );
       sleep(200);
-        servoL.setPosition(0.85);
-      servoR.setPosition(0.15);
-      liftMotor.setTargetPosition(306);
+        liftMotor.setTargetPosition(0);
+        servoL.setPosition(0.81);
+        servoR.setPosition(0.15);
+         encoderDrive(-0.35,-1, -1, -1, -1, 5);
+//        //Backwards
+//        leftBackMotor.setPower(-0.35);
+//        rightBackMotor.setPower(-0.35);
+//        rightFrontMotor.setPower(-0.35);
+//        leftFrontMotor.setPower(-0.35);
         encoderDrive(0.75, -1.5, -1.5, 1.5, 1.5, 5);
         encoderDrive(0.3, 1.5,1.5,1.5,1.5,5 );
 if (ZONE==1){
