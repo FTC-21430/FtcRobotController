@@ -80,8 +80,8 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
         // POV Mode uses left stick to go forward, and right stick to turn.
         // - This uses basic math to combine motions and is easier to drive straight.
 
-        servoL.setPosition(0.7);
-        servoR.setPosition(0.38);
+        servoL.setPosition(0.65);
+        servoR.setPosition(0.4);
 
         //Power Source
 
@@ -98,9 +98,7 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
 
 
 
-        encoderDrive(0.75, 1.58, 1.58, -1.58, -1.58,5);
-        liftMotor.setTargetPosition(1344);
-
+        encoderDrive(0.5, 1.8, 1.8, -1.8, -1.8,5);
             //Sideways to the Right
 //        rightBackMotor.setPower(0.85);
 //        leftFrontMotor.setPower(0.85);
@@ -109,7 +107,7 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
 //
 //        sleep(10);
 //
-        encoderDrive(0.75,2.33,2.33,2.33,2.33,5);
+        encoderDrive(0.5,2.0,2.0,2.0,2.0,5);
 //        //Forwards
 //        leftBackMotor.setPower(0.35);
 //        rightBackMotor.setPower(0.35);
@@ -117,56 +115,40 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
 //        leftFrontMotor.setPower(0.35);
 //
 //        sleep(845);
-//
-        //encoderDrive(-0.35,-1, -1, -1, -1, 5);
-//        //Backwards
-//        leftBackMotor.setPower(-0.35);
-//        rightBackMotor.setPower(-0.35);
-//        rightFrontMotor.setPower(-0.35);
-//        leftFrontMotor.setPower(-0.35);
-//
-//
 
-        encoderDrive(0.75, 1.08, 1.08, -1.08, -1.08, 5);
+        encoderDrive(0.5, 1.4, 1.4, -1.4, -1.4, 5);
 //        //slide to the Right
 //
 //        leftBackMotor.setPower(-0.85);
 //        rightBackMotor.setPower(0.85);
 //        rightFrontMotor.setPower(-0.85);
 //        leftFrontMotor.setPower(0.85);
-
-
-        encoderDrive(0.3, 0.54,0.54,0.54,0.54,5 );
+        liftMotor.setTargetPosition(1741);
+        sleep(5000);
+        encoderDrive(0.3, 0.6,0.6,0.6,0.6,5 );
         //forwards
+
         servoL.setPosition(0.81);
         servoR.setPosition(0.312);
-
-
-        sleep(50);
-        liftMotor.setTargetPosition(1741);
-
-
-        liftMotor.setTargetPosition(1741);
         encoderDrive(0.75,2.0,2.0,2.0,2.0,5);
 
 //        sleep(625);
 
-      sleep(700);
-        servoL.setPosition(0.7);
-        servoR.setPosition(0.38);
+        sleep(700);
+        servoL.setPosition(0.81);
+        servoR.setPosition(0.312);
+        //open
+        encoderDrive(0.5,-0.54, -0.54, -0.54, -0.54, 5);
+//        Backwards
+
+        sleep(700);
+        servoL.setPosition((0.65));
+        servoR.setPosition(0.40);
+        //closed
         liftMotor.setTargetPosition(0);
-
-        encoderDrive(-0.35,-0.54, -0.54, -0.54, -0.54, 5);
-//        //Backwards
-//        leftBackMotor.setPower(-0.35);
-//        rightBackMotor.setPower(-0.35);
-//        rightFrontMotor.setPower(-0.35);
-//        leftFrontMotor.setPower(-0.35);
-
-            stop();
-
         //   encoderDrive(0.75, -1.5, -1.5, 1.5, 1.5, 5);
         // encoderDrive(0.3, 1.5,1.5,1.5,1.5,5 );
+        stop();
 if (ZONE==1){
     //move to zone 1
 }
