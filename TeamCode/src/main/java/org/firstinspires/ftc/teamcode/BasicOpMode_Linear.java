@@ -233,12 +233,14 @@ if(fastMode==1){
               rightBackPower = rightBackPower / 2;
             }
             if (stick == true) {
-                position_L =0.81;
-                position_R = 0.312;
+                position_L =0.85;
+                position_R = 0.285;
+                //INTAKE open
             }
             if (stick == false) {
-                position_L = 0.7;
-                position_R = 0.38;
+                position_L = 0.72;
+                position_R = 0.39;
+                //INTAKE closed
             }
 
             // Send calculated power to wheels

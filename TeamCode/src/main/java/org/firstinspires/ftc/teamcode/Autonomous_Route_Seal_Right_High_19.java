@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Core;
@@ -21,8 +20,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name="Autonomous_Route_Seal_RLeft_19", group="Monkey")
-public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
+@Autonomous(name="Autonomous_Route_Seal_Right_High_19", group="Monkey")
+public class Autonomous_Route_Seal_Right_High_19 extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftFrontMotor = null;
@@ -43,7 +42,7 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
         telemetry.update();
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        Autonomous_Route_Seal_RLeft_19.SamplePipeline pipeline =  new Autonomous_Route_Seal_RLeft_19.SamplePipeline();
+        Autonomous_Route_Seal_Right_High_19.SamplePipeline pipeline =  new Autonomous_Route_Seal_Right_High_19.SamplePipeline();
         webcam.setPipeline(pipeline);
         webcam.setMillisecondsPermissionTimeout(2500); // Timeout for obtaining permission is configurable. Set before opening.
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -116,14 +115,13 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
         if (pipeline.getGREENsum() >= pipeline.getBLUEsum() && pipeline.getGREENsum() >= pipeline.getREDsum()){
             Zone = 3;
         }
-
         telemetry.addData("Zone", Zone);
         telemetry.update();
         sleep(2000);
 
-
         Zone = 3;
-        //test value
+        // test value
+
 
         // Choose to drive using either Tank Mode, or POV Mode
         // Comment out the method that's not used.  The default below is POV.
@@ -136,10 +134,8 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
         servoL.setPosition(0.72);
         servoR.setPosition(0.39);
 //closed
-        sleep(500);
-        // wait for intake to finish closing
         //Power Source
-
+        sleep(500);
         liftMotor.setTargetPosition(200);
 
 
@@ -147,16 +143,15 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-
+        telemetry.addData("Zone", Zone);
         telemetry.update();
 
-encoderDrive(0.2,0.2,0.2,0.2,0.2,5);
 
+encoderDrive(0.2, 0.1,0.1,0.1,0.1,5);
 
-        encoderDrive(0.5, 1.8, 1.8, -1.8, -1.8,5);
+        encoderDrive(0.5, -2., -2., 2., 2.,5);
+        //First Sideways to the Left
 
-
-        //First Sideways to the Right
 //        rightBackMotor.setPower(0.85);
 //        leftFrontMotor.setPower(0.85);
 //        leftBackMotor.setPower(-0.85);
@@ -164,8 +159,9 @@ encoderDrive(0.2,0.2,0.2,0.2,0.2,5);
 //
 //        sleep(10);
 //
-        encoderDrive(0.5,2.0,2.0,2.0,2.0,5);
+        encoderDrive(0.5,2.06,2.06,2.06,2.06,5);
 //        //First Forwards
+
 //        leftBackMotor.setPower(0.35);
 //        rightBackMotor.setPower(0.35);
 //        rightFrontMotor.setPower(0.35);
@@ -177,8 +173,8 @@ encoderDrive(0.2,0.2,0.2,0.2,0.2,5);
 //
 //
 
-        encoderDrive(0.5, 1.25, 1.25, -1.25, -1.25, 5);
-//        //Second slide to the Right
+        encoderDrive(0.5, -1.12, -1.12, 1.12, 1.12, 5);
+//        //Second slide to the Left
 //
 //        leftBackMotor.setPower(-0.85);
 //        rightBackMotor.setPower(0.85);
@@ -186,15 +182,16 @@ encoderDrive(0.2,0.2,0.2,0.2,0.2,5);
 //        leftFrontMotor.setPower(0.85);
         liftMotor.setTargetPosition(1800);
         sleep(1500);
-        encoderDrive(0.3, 0.54,0.54,0.54,0.54,5 );
+        encoderDrive(0.3, 0.40,0.4,0.4,0.4,5 );
         //Second forwards to high junction
         sleep(3000);
+        stop();
 
         servoL.setPosition(0.85);
         servoR.setPosition(0.285);
         //open
         sleep(1000);
-        encoderDrive(0.3, -0.5,-0.5,-0.5,-0.5,5 );
+        encoderDrive(0.3, -0.4,-0.4,-0.4,-0.4,5 );
         //First Backwards
 
         sleep(500);
@@ -207,13 +204,14 @@ encoderDrive(0.2,0.2,0.2,0.2,0.2,5);
         //encoderDrive(0.3, 1.5,1.5,1.5,1.5,5 );
         stop();
         if (Zone==1){
-            encoderDrive(0.5, -5.6, -5.6, 5.6, 5.6,5);
+            encoderDrive(0.5, 1.15, 1.15, -1.15, -1.15, 5);
+
         }
         if(Zone==2){
-            encoderDrive(0.5, -3.25, -3.25, 3.25, 3.25,5);
+            encoderDrive(0.5, 3.45, 3.45, -3.45, -3.45,5);
         }
         if (Zone==3 ){
-            encoderDrive(0.5, -1.25, -1.25, 1.25, 1.25, 5);
+            encoderDrive(0.5, 5.8, 5.8, -5.8, -5.8,5);
         }
         sleep( 3000);
         stop();
@@ -324,7 +322,7 @@ encoderDrive(0.2,0.2,0.2,0.2,0.2,5);
              */
 
 
-            Mat cropped = new Mat(input,new Rect(245, 228,100 , 150));
+            Mat cropped = new Mat(input,new Rect(530, 228,100 , 150));
 
             Imgproc.cvtColor(cropped,cropped,Imgproc.COLOR_RGB2HSV);
             midPixel = cropped.get(50,75);
