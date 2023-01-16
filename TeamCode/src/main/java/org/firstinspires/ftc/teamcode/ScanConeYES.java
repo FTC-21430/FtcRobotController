@@ -256,30 +256,30 @@ Scalar REDsecondsum = new Scalar(0);
 
 
 Scalar low = new Scalar(0, 127, 51);
-Scalar high = new Scalar(20,255,255);
+Scalar high = new Scalar(30,255,255);
 Mat out = new Mat();
             Core.inRange(cropped, low, high, out);
             REDsum = Core.sumElems(out);
 
-            low = new Scalar(160, 100, 51);
+            low = new Scalar(150, 100, 51);
             high = new Scalar(180,255,255);
             out = new Mat();
             Core.inRange(cropped, low, high, out);
             REDsecondsum =Core.sumElems(out);
 
-            low = new Scalar(100, 120, 51);
-            high = new Scalar(140,255,255);
+            low = new Scalar(90, 120, 51);
+            high = new Scalar(150,255,255);
             out = new Mat();
             Core.inRange(cropped, low, high, out);
             BLUEsum = Core.sumElems(out);
 
-             low = new Scalar(60, 127, 51);
-             high = new Scalar(100,255,255);
+             low = new Scalar(30, 127, 51);
+             high = new Scalar(90,255,255);
              out = new Mat();
             Core.inRange(cropped, low, high, out);
             GREENsum = Core.sumElems(out);
 
-
+            Imgproc.cvtColor(cropped,cropped,Imgproc.COLOR_HSV2RGB);
             return cropped;
         }
         public double getREDsum(){return (REDsum.val[0] / 255)+(REDsecondsum.val[0]/255) ;}

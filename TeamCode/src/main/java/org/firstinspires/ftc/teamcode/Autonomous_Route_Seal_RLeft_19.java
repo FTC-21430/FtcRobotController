@@ -122,7 +122,7 @@ public class Autonomous_Route_Seal_RLeft_19 extends LinearOpMode {
         sleep(2000);
 
 
-        Zone = 3;
+
         //test value
 
         // Choose to drive using either Tank Mode, or POV Mode
@@ -214,6 +214,9 @@ encoderDrive(0.2,0.2,0.2,0.2,0.2,5);
         }
         if (Zone==3 ){
             encoderDrive(0.5, -1.25, -1.25, 1.25, 1.25, 5);
+        }
+        if (Zone==0){
+            encoderDrive(0.5, -3.25, -3.25, 3.25, 3.25,5);
         }
         sleep( 3000);
         stop();
@@ -338,30 +341,30 @@ encoderDrive(0.2,0.2,0.2,0.2,0.2,5);
 
 
             Scalar low = new Scalar(0, 127, 51);
-            Scalar high = new Scalar(20,255,255);
+            Scalar high = new Scalar(30,255,255);
             Mat out = new Mat();
             Core.inRange(cropped, low, high, out);
             REDsum = Core.sumElems(out);
 
-            low = new Scalar(160, 100, 51);
+            low = new Scalar(151, 100, 51);
             high = new Scalar(180,255,255);
             out = new Mat();
             Core.inRange(cropped, low, high, out);
             REDsecondsum =Core.sumElems(out);
 
-            low = new Scalar(100, 120, 51);
-            high = new Scalar(140,255,255);
+            low = new Scalar(91, 120, 51);
+            high = new Scalar(150,255,255);
             out = new Mat();
             Core.inRange(cropped, low, high, out);
             BLUEsum = Core.sumElems(out);
 
-            low = new Scalar(60, 127, 51);
-            high = new Scalar(100,255,255);
+            low = new Scalar(31, 127, 51);
+            high = new Scalar(90,255,255);
             out = new Mat();
             Core.inRange(cropped, low, high, out);
             GREENsum = Core.sumElems(out);
 
-
+            Imgproc.cvtColor(cropped,cropped,Imgproc.COLOR_HSV2RGB);
             return cropped;
         }
         public double getREDsum(){return (REDsum.val[0] / 255)+(REDsecondsum.val[0]/255) ;}
