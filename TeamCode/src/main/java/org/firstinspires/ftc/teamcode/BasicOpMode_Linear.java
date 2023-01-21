@@ -163,23 +163,23 @@ if(liftManual == true){
    }
    if(gamepad2.dpad_down == true && oldLiftDown == false){
        liftManaulSET=liftCurrent-50;
-       liftMotor.setTargetPosition(liftManaulSET);
+       liftMotor.setTargetPosition(liftManaulSET);    
    }
 } else {
     if (groundJunction) {
         liftMotor.setTargetPosition(0);
     }
     if (lowJunction) {
-        liftMotor.setTargetPosition(794);
+        liftMotor.setTargetPosition(774);
         //liftMotor.setTargetPosition(2600);
     }
     if (mediumJunction) {
-        liftMotor.setTargetPosition(1222);
+        liftMotor.setTargetPosition(1302);
        // liftMotor.setTargetPosition(4000);
         rightPressed = true;
     }
     if (highJunction) {
-        liftMotor.setTargetPosition(1741);
+        liftMotor.setTargetPosition(1820);
         //liftMotor.setTargetPosition(5700);
     }
 }
