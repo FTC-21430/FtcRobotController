@@ -217,15 +217,12 @@ if(gamepad1.dpad_up){
             leftBackPower = leftBackPower / 2;
             rightFrontPower = rightFrontPower / 2;
             rightBackPower = rightBackPower / 2;
-if(fastMode==1){
-    leftFrontPower=leftFrontPower * 2;
-    leftBackPower = leftBackPower * 2;
-    rightFrontPower = rightFrontPower * 2;
-    rightBackPower = rightBackPower * 2;
+            if(fastMode==1){
+            leftFrontPower=leftFrontPower * 2;
+            leftBackPower = leftBackPower * 2;
+            rightFrontPower = rightFrontPower * 2;
+            rightBackPower = rightBackPower * 2;
 }
-
-
-
             if(slowMode){
               leftFrontPower=leftFrontPower / 2;
               leftBackPower = leftBackPower / 2;
