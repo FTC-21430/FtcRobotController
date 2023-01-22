@@ -20,8 +20,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name="Autonomous_Route_Seal_Right_High_19", group="Monkey")
-public class Autonomous_Route_Seal_Right_High_19 extends LinearOpMode {
+@Autonomous(name="Autonomous_Route_Seal_Right_PARK_19", group="Monkey")
+public class Autonomous_Route_Seal_Right_PARK_19 extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftFrontMotor = null;
@@ -42,7 +42,7 @@ public class Autonomous_Route_Seal_Right_High_19 extends LinearOpMode {
         telemetry.update();
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        Autonomous_Route_Seal_Right_High_19.SamplePipeline pipeline =  new Autonomous_Route_Seal_Right_High_19.SamplePipeline();
+        Autonomous_Route_Seal_Right_PARK_19.SamplePipeline pipeline =  new Autonomous_Route_Seal_Right_PARK_19.SamplePipeline();
         webcam.setPipeline(pipeline);
         webcam.setMillisecondsPermissionTimeout(2500); // Timeout for obtaining permission is configurable. Set before opening.
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -58,8 +58,6 @@ public class Autonomous_Route_Seal_Right_High_19 extends LinearOpMode {
             public void onError(int errorCode)
             {
 
-                telemetry.addData(" camera connection MAJOR ERROR",errorCode);
-                telemetry.update();
             }
         });
         // Initialize the hardware variables. Note that the strings used here as parameters
@@ -182,29 +180,29 @@ encoderDrive(0.2, 0.1,0.1,0.1,0.1,5);
 //        rightBackMotor.setPower(0.85);
 //        rightFrontMotor.setPower(-0.85);
 //        leftFrontMotor.setPower(0.85);
-        liftMotor.setTargetPosition(1800);
-        sleep(1500);
-        encoderDrive(0.3, 0.40,0.4,0.4,0.4,5 );
+        //liftMotor.setTargetPosition(1800);
+        //sleep(1500);
+        //encoderDrive(0.3, 0.40,0.4,0.4,0.4,5 );
         //Second forwards to high junction
-        sleep(3000);
-        stop();
+        //sleep(3000);
+        //stop();
 
-        servoL.setPosition(0.85);
-        servoR.setPosition(0.285);
+        //servoL.setPosition(0.85);
+        //servoR.setPosition(0.285);
         //open
-        sleep(1000);
-        encoderDrive(0.3, -0.4,-0.4,-0.4,-0.4,5 );
+        //sleep(1000);
+        //encoderDrive(0.3, -0.4,-0.4,-0.4,-0.4,5 );
         //First Backwards
 
-        sleep(500);
-        servoL.setPosition(0.72);
-        servoR.setPosition(0.39);
-        sleep(200);
+        //sleep(500);
+        //servoL.setPosition(0.72);
+        //servoR.setPosition(0.39);
+        //sleep(200);
         //closed
-        liftMotor.setTargetPosition(0);
+        //liftMotor.setTargetPosition(0);
         // encoderDrive(0.75, -1.5, -1.5, 1.5, 1.5, 5);
         //encoderDrive(0.3, 1.5,1.5,1.5,1.5,5 );
-        stop();
+        //stop();
         if (Zone==1){
             encoderDrive(0.5, 1.15, 1.15, -1.15, -1.15, 5);
 

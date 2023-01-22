@@ -163,7 +163,7 @@ if(liftManual == true){
    }
    if(gamepad2.dpad_down == true && oldLiftDown == false){
        liftManaulSET=liftCurrent-50;
-       liftMotor.setTargetPosition(liftManaulSET);    
+       liftMotor.setTargetPosition(liftManaulSET);
    }
 } else {
     if (groundJunction) {
