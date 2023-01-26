@@ -99,7 +99,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
         servoL.setPosition(0.72);
         servoR.setPosition(0.33);
         // Wait for the game to start (driver presses PLAY)
-        int liftManaulSET = 0;
+       int LiftManual = 0;
         waitForStart();
         runtime.reset();
 
@@ -121,24 +121,22 @@ public class BasicOpMode_Linear extends LinearOpMode {
             double drive = -gamepad1.left_stick_y;
             double slide = gamepad1.left_stick_x;
             double turn = gamepad1.right_stick_x;
+            double LiftAdd = gamepad2.left_stick_y;
             boolean slowMode = gamepad1.right_bumper;
             boolean stick = gamepad2.b;
             boolean highJunction = gamepad2.dpad_up;
             boolean mediumJunction = gamepad2.dpad_right;
-            boolean lowJunction = gamepad2.dpad_down;
-            boolean groundJunction = gamepad2.dpad_left;
+            boolean lowJunction = gamepad2.dpad_left;
+            boolean groundJunction = gamepad2.dpad_down;
             float fastMode = gamepad1.right_trigger;
-            boolean liftManual = gamepad2.left_bumper;
-            int liftCurrent;
-            boolean oldLiftUp = false;
-            boolean oldLiftDown=false;
+
 
 
 
 
             //double turn  =  gamepad2.right_stick_x;
 
-liftCurrent = liftMotor.getCurrentPosition();
+
 
 
 
@@ -149,43 +147,47 @@ liftCurrent = liftMotor.getCurrentPosition();
 
 
 
-            if(liftManaulSET >= 5699){
-    liftManaulSET = 5750;
-}
-if (liftManaulSET < 50) {
-    liftManaulSET = 0;
-}
+
             liftMotor.setPower(Math.abs(1));
-if(liftManual == true){
-   if(gamepad2.dpad_up == true && oldLiftUp == false){
-       liftManaulSET = liftCurrent+50;
-       liftMotor.setTargetPosition(liftManaulSET);
-   }
-   if(gamepad2.dpad_down == true && oldLiftDown == false){
-       liftManaulSET=liftCurrent-50;
-       liftMotor.setTargetPosition(liftManaulSET);
-   }
-} else {
+
+            if (LiftAdd <= -0.2){
+                LiftManual = LiftManual + 5;
+                if (LiftManual >= 1851) LiftManual = 1850;
+                if (LiftManual <= 1) LiftManual = 2;
+                liftMotor.setTargetPosition(LiftManual);
+                //go up
+            }
+            if (LiftAdd >= 0.2) {
+                LiftManual = LiftManual - 5;
+                if (LiftManual >= 1851) LiftManual = 1850;
+                if (LiftManual <= 1) LiftManual = 2;
+                liftMotor.setTargetPosition(LiftManual);
+                // go down
+            }
+
     if (groundJunction) {
         liftMotor.setTargetPosition(0);
+        LiftManual = 0;
     }
     if (lowJunction) {
         liftMotor.setTargetPosition(774);
         //liftMotor.setTargetPosition(2600);
+        LiftManual = 774;
     }
     if (mediumJunction) {
         liftMotor.setTargetPosition(1302);
-       // liftMotor.setTargetPosition(4000);
+        // liftMotor.setTargetPosition(4000);
         rightPressed = true;
+        LiftManual = 1302;
     }
     if (highJunction) {
         liftMotor.setTargetPosition(1820);
+        LiftManual = 1820;
         //liftMotor.setTargetPosition(5700);
     }
-}
+    //stack
             // Tank Mode uses one stick to control each wheel.
-   oldLiftUp = gamepad2.dpad_up;
-oldLiftDown = gamepad2.dpad_down;
+
 // - This requires no math, but it is hard to drive forward slowly and keep straight.
             //leftPower  = -gamepad1.left_stick_y ;
             //rightPower = -gamepad1.right_stick_y ;
@@ -254,6 +256,7 @@ if(gamepad1.dpad_up){
             telemetry.addData("Encoders", leftBackMotor.getCurrentPosition());
             telemetry.addData(" lift Encoders", liftMotor.getCurrentPosition());
             telemetry.addData("Right pressed", rightPressed);
+            telemetry.addData("Lift manual add", LiftAdd);
             telemetry.update();
         }
     }
