@@ -176,7 +176,7 @@ encoderDrive(0.2,0.2,0.2,0.2,0.2,5);
 //
 //
 
-        encoderDrive(0.5, -1.25, -1.25, 1.25, 1.25, 5);
+        encoderDrive(0.5, -1.0, -1.0, 1.0, 1.0, 5);
 //        //Second slide to the Right
 //
 //        leftBackMotor.setPower(-0.85);
@@ -185,7 +185,7 @@ encoderDrive(0.2,0.2,0.2,0.2,0.2,5);
 //        leftFrontMotor.setPower(0.85);
         liftMotor.setTargetPosition(1350);
         sleep(1500);
-        encoderDrive(0.3, 0.54,0.54,0.54,0.54,5 );
+        encoderDrive(0.3, 0.37,0.37,0.37,0.37,5 );
         //Second forwards to high junction
         sleep(3000);
 
@@ -340,25 +340,25 @@ encoderDrive(0.2,0.2,0.2,0.2,0.2,5);
 
 
             Scalar low = new Scalar(0, 127, 51);
-            Scalar high = new Scalar(30,255,255);
+            Scalar high = new Scalar(40,255,255);
             Mat out = new Mat();
             Core.inRange(cropped, low, high, out);
             REDsum = Core.sumElems(out);
 
-            low = new Scalar(151, 100, 51);
+            low = new Scalar(140, 100, 51);
             high = new Scalar(180,255,255);
             out = new Mat();
             Core.inRange(cropped, low, high, out);
             REDsecondsum =Core.sumElems(out);
 
-            low = new Scalar(91, 120, 51);
-            high = new Scalar(150,255,255);
+            low = new Scalar(97, 120, 51);
+            high = new Scalar(130,255,255);
             out = new Mat();
             Core.inRange(cropped, low, high, out);
             BLUEsum = Core.sumElems(out);
 
-            low = new Scalar(31, 127, 51);
-            high = new Scalar(90,255,255);
+            low = new Scalar(40, 127, 51);
+            high = new Scalar(97,255,255);
             out = new Mat();
             Core.inRange(cropped, low, high, out);
             GREENsum = Core.sumElems(out);
