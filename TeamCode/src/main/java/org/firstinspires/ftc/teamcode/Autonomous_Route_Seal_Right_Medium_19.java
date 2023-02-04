@@ -182,11 +182,11 @@ encoderDrive(0.2, 0.1,0.1,0.1,0.1,5);
 //        rightBackMotor.setPower(0.85);
 //        rightFrontMotor.setPower(-0.85);
 //        leftFrontMotor.setPower(0.85);
-        liftMotor.setTargetPosition(1350);
-        //sleep(1500);
+        liftMotor.setTargetPosition(1302);
+        sleep(1500);
         encoderDrive(0.3, 0.37,0.37,0.37,0.37,5 );
         //Second forwards to high junction
-        sleep(3000);
+        sleep(1000);
         stop();
 
         servoL.setPosition(0.85);
