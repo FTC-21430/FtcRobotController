@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -64,14 +65,18 @@ public class BasicOpMode_Linear extends LinearOpMode {
 
     boolean rightPressed = false;
 
-
+    DigitalChannel digitalTouch;  // Hardware Device Object
     Servo servoL;
     Servo servoR;
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+        // get a reference to our digitalTouch object.
+        digitalTouch = hardwareMap.get(DigitalChannel.class, "Limit_Switch");
 
+        // set the digital channel to input.
+        digitalTouch.setMode(DigitalChannel.Mode.INPUT);
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
@@ -100,6 +105,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
         servoR.setPosition(0.33);
         // Wait for the game to start (driver presses PLAY)
        int LiftManual = 0;
+        boolean calabrate_Lift = false;
         waitForStart();
         runtime.reset();
 
@@ -146,9 +152,17 @@ public class BasicOpMode_Linear extends LinearOpMode {
             rightBackPower =Range.clip(drive + slide - turn, -1.0, 1.0);
 
 
+            if (!calabrate_Lift) {
+                liftMotor.setPower(Math.abs(1));
+            }
 
 
-            liftMotor.setPower(Math.abs(1));
+
+            if (digitalTouch.getState() == true) {
+                telemetry.addData("Digital Touch", "Is Pressed");
+            } else {
+                telemetry.addData("Digital Touch", "Is Not Pressed");
+            }
 
             if (LiftAdd <= -0.2){
                 LiftManual = LiftManual + 5;
@@ -164,10 +178,29 @@ public class BasicOpMode_Linear extends LinearOpMode {
                 liftMotor.setTargetPosition(LiftManual);
                 // go down
             }
+if (calabrate_Lift == true && liftMotor.getCurrentPosition() <= 100){
 
+   if (digitalTouch.getState() == false){
+       liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+       liftMotor.setPower(-0.2);
+
+   }
+   if (digitalTouch.getState() == true){
+       liftMotor.setPower(0);
+       liftMotor.setTargetPosition(0);
+       liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+       liftMotor.setPower(Math.abs(1));
+       calabrate_Lift = false;
+   }
+}else{
+    liftMotor.setPower(Math.abs(1));
+}
     if (groundJunction) {
-        liftMotor.setTargetPosition(0);
-        LiftManual = 0;
+        liftMotor.setTargetPosition(100);
+        LiftManual = 50;
+       runtime.reset();
+        calabrate_Lift = true;
     }
     if (lowJunction) {
         liftMotor.setTargetPosition(774);
@@ -257,6 +290,7 @@ if(gamepad1.dpad_up){
             telemetry.addData(" lift Encoders", liftMotor.getCurrentPosition());
             telemetry.addData("Right pressed", rightPressed);
             telemetry.addData("Lift manual add", LiftAdd);
+            telemetry.addData("cala_lift", calabrate_Lift);
             telemetry.update();
         }
     }
