@@ -78,7 +78,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  * to use those parameters.
  */
 @TeleOp(name = "Sensor: IMU Orthogonal", group = "Sensor")
-@Disabled   // Comment this out to add to the OpMode list
+   // Comment this out to add to the OpMode list
 public class SensorIMUOrthogonal extends LinearOpMode
 {
     // The IMU sensor object
@@ -96,7 +96,7 @@ public class SensorIMUOrthogonal extends LinearOpMode
 
         /* Define how the hub is mounted on the robot to get the correct Yaw, Pitch and Roll values.
          *
-         * Two input parameters are required to fully specify the Orientation.
+         * Two input param  eters are required to fully specify the Orientation.
          * The first parameter specifies the direction the printed logo on the Hub is pointing.
          * The second parameter specifies the direction the USB connector on the Hub is pointing.
          * All directions are relative to the robot, and left/right is as-viewed from behind the robot.

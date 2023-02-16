@@ -29,14 +29,20 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 
 /**
@@ -55,6 +61,7 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
 public class BasicOpMode_Linear extends LinearOpMode {
 
+    IMU imu;
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftFrontMotor = null;
@@ -64,17 +71,21 @@ public class BasicOpMode_Linear extends LinearOpMode {
     private DcMotor liftMotor = null;
 
     boolean rightPressed = false;
-
+    boolean upStack_old = false;
     DigitalChannel digitalTouch;  // Hardware Device Object
     Servo servoL;
     Servo servoR;
     @Override
     public void runOpMode() {
+        imu = hardwareMap.get(IMU.class, "imu");
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         // get a reference to our digitalTouch object.
         digitalTouch = hardwareMap.get(DigitalChannel.class, "Limit_Switch");
-
+        imu.initialize(new IMU.Parameters(orientationOnRobot));
         // set the digital channel to input.
         digitalTouch.setMode(DigitalChannel.Mode.INPUT);
         // Initialize the hardware variables. Note that the strings used here as parameters
@@ -95,10 +106,13 @@ public class BasicOpMode_Linear extends LinearOpMode {
         liftMotor.setTargetPosition(0);
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
+        double Target = 0;
+        double error = 0;
+        double current= 0;
         double position_L = 1;
         double position_R = 0;
+       boolean leftTurnold =false;
+       boolean rightTurnold = false;
         servoL = hardwareMap.get(Servo.class, "left_hand");
         servoR = hardwareMap.get(Servo.class, "right_hand");
         servoL.setPosition(0.72);
@@ -135,23 +149,65 @@ public class BasicOpMode_Linear extends LinearOpMode {
             boolean lowJunction = gamepad2.dpad_left;
             boolean groundJunction = gamepad2.dpad_down;
             float fastMode = gamepad1.right_trigger;
+            boolean upStack = gamepad2.left_bumper;
 
 
 
 
+
+            YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+            AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
 
             //double turn  =  gamepad2.right_stick_x;
+            telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", orientation.getYaw(AngleUnit.DEGREES));
 
 
 
+          current = orientation.getYaw(AngleUnit.DEGREES);
 
+            if (gamepad1.y) {
+                telemetry.addData("Yaw", "Resetting\n");
+                imu.resetYaw();
+                Target = 0;
+            }
+          if (gamepad1.x && !leftTurnold){
+              Target -= 90;
+          }
+          if (gamepad1.b && !rightTurnold){
+              Target += 90;
+          }
+leftTurnold = gamepad1.x;
+          rightTurnold = gamepad1.b;
+          error = Wrap((Target - current));
+          if (gamepad1.right_stick_x != 0){
+              imu.resetYaw();
+              Target = 0;
+          }
 
+        turn -= error/20;
+            if(gamepad1.dpad_up){
+               drive = 1;
+               slide = 0;
+            }
+            if(gamepad1.dpad_left){
+                drive = 0;
+                slide = -1;
+            }
+            if(gamepad1.dpad_right){
+                drive = 0;
+                slide = 1;
+            }
+            if(gamepad1.dpad_down){
+               drive = -1;
+               slide = 0;
+            }
             leftFrontPower =Range.clip(drive + slide + turn, -1.0, 1.0);
             leftBackPower  =Range.clip(drive - slide + turn,-1.0, 1.0 );
             rightFrontPower=Range.clip(drive - slide - turn, -1.0, 1.0);
             rightBackPower =Range.clip(drive + slide - turn, -1.0, 1.0);
 
-
+            telemetry.addData("error", error);
+            telemetry.addData("turn", turn);
             if (!calabrate_Lift) {
                 liftMotor.setPower(Math.abs(1));
             }
@@ -176,8 +232,19 @@ public class BasicOpMode_Linear extends LinearOpMode {
                 if (LiftManual >= 1851) LiftManual = 1850;
                 if (LiftManual <= 1) LiftManual = 2;
                 liftMotor.setTargetPosition(LiftManual);
+
+
                 // go down
             }
+            if (upStack && !upStack_old ){
+                // go up
+LiftManual += 60;
+                if (LiftManual >= 1851) LiftManual = 1850;
+                if (LiftManual <= 1) LiftManual = 2;
+                liftMotor.setTargetPosition(LiftManual);
+
+            }
+            upStack_old = upStack;
 if (calabrate_Lift == true && liftMotor.getCurrentPosition() <= 100){
 
    if (digitalTouch.getState() == false){
@@ -185,7 +252,7 @@ if (calabrate_Lift == true && liftMotor.getCurrentPosition() <= 100){
        liftMotor.setPower(-0.2);
 
    }
-   if (digitalTouch.getState() == true){
+   if (digitalTouch.getState() == true || runtime.seconds()>  = 3){
        liftMotor.setPower(0);
        liftMotor.setTargetPosition(0);
        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -224,30 +291,7 @@ if (calabrate_Lift == true && liftMotor.getCurrentPosition() <= 100){
 // - This requires no math, but it is hard to drive forward slowly and keep straight.
             //leftPower  = -gamepad1.left_stick_y ;
             //rightPower = -gamepad1.right_stick_y ;
-if(gamepad1.dpad_up){
-    leftFrontPower =1;
-    leftBackPower=1;
-    rightFrontPower=1;
-    rightBackPower=1;
-}
-            if(gamepad1.dpad_left){
-                leftFrontPower =-1;
-                leftBackPower=1;
-                rightFrontPower=1;
-                rightBackPower=-1;
-            }
-            if(gamepad1.dpad_right){
-                leftFrontPower =1;
-                leftBackPower=-1;
-                rightFrontPower=-1;
-                rightBackPower=1;
-            }
-            if(gamepad1.dpad_down){
-                leftFrontPower =-1;
-                leftBackPower=-1;
-                rightFrontPower=-1;
-                rightBackPower=-1;
-            }
+
             leftFrontPower=leftFrontPower / 2;
             leftBackPower = leftBackPower / 2;
             rightFrontPower = rightFrontPower / 2;
@@ -293,5 +337,15 @@ if(gamepad1.dpad_up){
             telemetry.addData("cala_lift", calabrate_Lift);
             telemetry.update();
         }
+    }
+
+    double Wrap(double angle){
+        while(angle > 180){
+            angle -= 360;
+        }
+        while(angle < -180){
+           angle += 360;
+        }
+        return angle;
     }
 }
