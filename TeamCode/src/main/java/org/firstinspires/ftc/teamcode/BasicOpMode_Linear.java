@@ -170,14 +170,14 @@ public class BasicOpMode_Linear extends LinearOpMode {
                 imu.resetYaw();
                 Target = 0;
             }
-          if (gamepad1.x && !leftTurnold){
+          if (gamepad1.b && !leftTurnold){
               Target -= 90;
           }
-          if (gamepad1.b && !rightTurnold){
+          if (gamepad1.x && !rightTurnold){
               Target += 90;
           }
-leftTurnold = gamepad1.x;
-          rightTurnold = gamepad1.b;
+leftTurnold = gamepad1.b;
+          rightTurnold = gamepad1.x;
           error = Wrap((Target - current));
           if (gamepad1.right_stick_x != 0){
               imu.resetYaw();
@@ -252,7 +252,7 @@ if (calabrate_Lift == true && liftMotor.getCurrentPosition() <= 100){
        liftMotor.setPower(-0.2);
 
    }
-   if (digitalTouch.getState() == true || runtime.seconds()>  = 3){
+   if (digitalTouch.getState() == true || runtime.seconds() >= 3){
        liftMotor.setPower(0);
        liftMotor.setTargetPosition(0);
        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
