@@ -21,9 +21,9 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 @Autonomous(name="Autonomous_Route_Seal_RLeft_19_just_park", group="Monkey")
-public class Autonomous_Route_Seal_RLeft_19_just_park extends robot {
+public class Autonomous_Route_Seal_RLeft_19_just_park extends Robot {
     // Declare OpMode members.
-   Init();
+
     OpenCvWebcam webcam;
 
 
@@ -33,6 +33,7 @@ public class Autonomous_Route_Seal_RLeft_19_just_park extends robot {
 
     @Override
     public void runOpMode() {
+        Init();
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());

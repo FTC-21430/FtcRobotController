@@ -36,12 +36,6 @@ public abstract class Robot extends LinearOpMode {
         public DigitalChannel digitalTouch;  // Hardware Device Object
         public Servo servoL;
         public Servo servoR;
-    private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftFrontMotor = null;
-    private DcMotor leftBackMotor = null;
-    private DcMotor rightFrontMotor = null;
-    private DcMotor rightBackMotor = null;
-    private DcMotor liftMotor = null;
         public int MediumJunction = 1302;
     Robot.SamplePipeline pipeline =  new Robot.SamplePipeline();
     OpenCvWebcam webcam;
