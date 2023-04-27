@@ -26,9 +26,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package org.firstinspires.ftc.teamcode;
-
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -43,290 +41,51 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-
-
-/**
- * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
- * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
- * of the FTC Driver Station. When a selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
- *
- * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
- * It includes all the skeletal structure that all linear OpModes contain.
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
-
 @TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
-public class BasicOpMode_Linear extends LinearOpMode {
-
-    IMU imu;
-    // Declare OpMode members.
-    private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftFrontMotor = null;
-    private DcMotor leftBackMotor = null;
-    private DcMotor rightFrontMotor = null;
-    private DcMotor rightBackMotor = null;
-    private DcMotor liftMotor = null;
-
-    boolean rightPressed = false;
-    boolean upStack_old = false;
-    DigitalChannel digitalTouch;  // Hardware Device Object
-    Servo servoL;
-    Servo servoR;
+public class BasicOpMode_Linear extends Teleop_class {
+    // Wait for the game to start (driver presses PLAY)
     @Override
     public void runOpMode() {
-        imu = hardwareMap.get(IMU.class, "imu");
-        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
-        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-        // get a reference to our digitalTouch object.
-        digitalTouch = hardwareMap.get(DigitalChannel.class, "Limit_Switch");
-        imu.initialize(new IMU.Parameters(orientationOnRobot));
-        // set the digital channel to input.
-        digitalTouch.setMode(DigitalChannel.Mode.INPUT);
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
-        leftFrontMotor  = hardwareMap.get(DcMotor.class, "left_Front");
-        leftBackMotor = hardwareMap.get(DcMotor.class, "left_Back");
-        rightFrontMotor = hardwareMap.get(DcMotor.class, "right_Front");
-        rightBackMotor = hardwareMap.get(DcMotor.class,"right_Back");
-        liftMotor = hardwareMap.get(DcMotor.class,"liftMotor");
-        // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
-        // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
-        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
-        leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
-        rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
-        liftMotor.setTargetPosition(0);
-        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        double Target = 0;
-        double error = 0;
-        double current= 0;
-        double position_L = 1;
-        double position_R = 0;
-       boolean leftTurnold =false;
-       boolean rightTurnold = false;
-        servoL = hardwareMap.get(Servo.class, "left_hand");
-        servoR = hardwareMap.get(Servo.class, "right_hand");
-        servoL.setPosition(0.72);
-        servoR.setPosition(0.33);
-        // Wait for the game to start (driver presses PLAY)
-       int LiftManual = 0;
-        boolean calabrate_Lift = false;
-        waitForStart();
-        runtime.reset();
-
+      Init();
+      waitForStart();
+      runtime.reset();
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-
-
-
-            // Setup a variable for each drive wheel to save power level for telemetry
-            double leftFrontPower;
-            double leftBackPower;
-            double rightFrontPower;
-            double rightBackPower;
-            // Choose to drive using either Tank Mode, or POV Mode
-            // Comment out the method that's not used.  The default below is POV.
-
-            // POV Mode uses left stick to go forward, and right stick to turn.
-            // - This uses basic math to combine motions and is easier to drive straight.
-            double drive = -gamepad1.left_stick_y;
-            double slide = gamepad1.left_stick_x;
-            double turn = gamepad1.right_stick_x;
-            double LiftAdd = gamepad2.left_stick_y;
-            boolean slowMode = gamepad1.right_bumper;
-            boolean stick = gamepad2.b;
-            boolean highJunction = gamepad2.dpad_up;
-            boolean mediumJunction = gamepad2.dpad_right;
-            boolean lowJunction = gamepad2.dpad_left;
-            boolean groundJunction = gamepad2.dpad_down;
-            float fastMode = gamepad1.right_trigger;
-            boolean upStack = gamepad2.left_bumper;
-
-
-
-
-
-            YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-            AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
-
-            //double turn  =  gamepad2.right_stick_x;
-            telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", orientation.getYaw(AngleUnit.DEGREES));
-
-
-
-          current = orientation.getYaw(AngleUnit.DEGREES);
-
+            UpdateControls();
+        IMUstuffs();
             if (gamepad1.y) {
-                telemetry.addData("Yaw", "Resetting\n");
-                imu.resetYaw();
-                Target = 0;
+              IMUReset();
             }
-          if (gamepad1.b && !leftTurnold){
+          if (TurnLeft && !leftTurnold){
               Target -= 90;
           }
-          if (gamepad1.x && !rightTurnold){
+          if (TurnRight && !rightTurnold){
               Target += 90;
           }
-leftTurnold = gamepad1.b;
+            leftTurnold = gamepad1.b;
           rightTurnold = gamepad1.x;
-          error = Wrap((Target - current));
-          if (gamepad1.right_stick_x != 0){
-              imu.resetYaw();
-              Target = 0;
-          }
-
-        turn -= error/20;
-            if(gamepad1.dpad_up){
-               drive = 1;
-               slide = 0;
-            }
-            if(gamepad1.dpad_left){
-                drive = 0;
-                slide = -1;
-            }
-            if(gamepad1.dpad_right){
-                drive = 0;
-                slide = 1;
-            }
-            if(gamepad1.dpad_down){
-               drive = -1;
-               slide = 0;
-            }
-            leftFrontPower =Range.clip(drive + slide + turn, -1.0, 1.0);
-            leftBackPower  =Range.clip(drive - slide + turn,-1.0, 1.0 );
-            rightFrontPower=Range.clip(drive - slide - turn, -1.0, 1.0);
-            rightBackPower =Range.clip(drive + slide - turn, -1.0, 1.0);
-
+          ProportionalFeedbackControl();
+           GridRunner();
+           straferAlgorithm();
             telemetry.addData("error", error);
             telemetry.addData("turn", turn);
             if (!calabrate_Lift) {
                 liftMotor.setPower(Math.abs(1));
             }
-
-
-
             if (digitalTouch.getState() == true) {
                 telemetry.addData("Digital Touch", "Is Pressed");
             } else {
                 telemetry.addData("Digital Touch", "Is Not Pressed");
             }
-
-            if (LiftAdd <= -0.2){
-                LiftManual = LiftManual + 5;
-                if (LiftManual >= 1851) LiftManual = 1850;
-                if (LiftManual <= 1) LiftManual = 2;
-                liftMotor.setTargetPosition(LiftManual);
-                //go up
+            LiftControl();
+           speedControl();
+            if (Intake == true) {
+               IntakeOpen();
             }
-            if (LiftAdd >= 0.2) {
-                LiftManual = LiftManual - 5;
-                if (LiftManual >= 1851) LiftManual = 1850;
-                if (LiftManual <= 1) LiftManual = 2;
-                liftMotor.setTargetPosition(LiftManual);
-
-
-                // go down
+            if (Intake == false) {
+                IntakeClose();
             }
-            if (upStack && !upStack_old ){
-                // go up
-LiftManual += 60;
-                if (LiftManual >= 1851) LiftManual = 1850;
-                if (LiftManual <= 1) LiftManual = 2;
-                liftMotor.setTargetPosition(LiftManual);
-
-            }
-            upStack_old = upStack;
-if (calabrate_Lift == true && liftMotor.getCurrentPosition() <= 100){
-
-   if (digitalTouch.getState() == false){
-       liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-       liftMotor.setPower(-0.2);
-
-   }
-   if (digitalTouch.getState() == true || runtime.seconds() >= 3){
-       liftMotor.setPower(0);
-       liftMotor.setTargetPosition(0);
-       liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-       liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-       liftMotor.setPower(Math.abs(1));
-       calabrate_Lift = false;
-   }
-}else{
-    liftMotor.setPower(Math.abs(1));
-}
-    if (groundJunction) {
-        liftMotor.setTargetPosition(100);
-        LiftManual = 50;
-       runtime.reset();
-        calabrate_Lift = true;
-    }
-    if (lowJunction) {
-        liftMotor.setTargetPosition(774);
-        //liftMotor.setTargetPosition(2600);
-        LiftManual = 774;
-    }
-    if (mediumJunction) {
-        liftMotor.setTargetPosition(1302);
-        // liftMotor.setTargetPosition(4000);
-        rightPressed = true;
-        LiftManual = 1302;
-    }
-    if (highJunction) {
-        liftMotor.setTargetPosition(1820);
-        LiftManual = 1820;
-        //liftMotor.setTargetPosition(5700);
-    }
-    //stack
-            // Tank Mode uses one stick to control each wheel.
-
-// - This requires no math, but it is hard to drive forward slowly and keep straight.
-            //leftPower  = -gamepad1.left_stick_y ;
-            //rightPower = -gamepad1.right_stick_y ;
-
-            leftFrontPower=leftFrontPower / 2;
-            leftBackPower = leftBackPower / 2;
-            rightFrontPower = rightFrontPower / 2;
-            rightBackPower = rightBackPower / 2;
-            if(fastMode==1){
-            leftFrontPower=leftFrontPower * 2;
-            leftBackPower = leftBackPower * 2;
-            rightFrontPower = rightFrontPower * 2;
-            rightBackPower = rightBackPower * 2;
-}
-            if(slowMode){
-              leftFrontPower=leftFrontPower / 2;
-              leftBackPower = leftBackPower / 2;
-              rightFrontPower = rightFrontPower / 2;
-              rightBackPower = rightBackPower / 2;
-            }
-            if (stick == true) {
-                position_L =0.85;
-                position_R = 0.285;
-                //INTAKE open
-            }
-            if (stick == false) {
-                position_L = 0.72;
-                position_R = 0.39;
-                //INTAKE closed
-            }
-
-            // Send calculated power to wheels
-            leftFrontMotor.setPower(leftFrontPower);
-            leftBackMotor.setPower(leftBackPower);
-            rightFrontMotor.setPower(rightFrontPower);
-            rightBackMotor.setPower(rightBackPower);
-            //Set the servo to the new position and pause;
-            servoL.setPosition(position_L);
-            servoR.setPosition(position_R);
+           setMotorPower();
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftFrontPower, rightFrontPower);
@@ -337,15 +96,5 @@ if (calabrate_Lift == true && liftMotor.getCurrentPosition() <= 100){
             telemetry.addData("cala_lift", calabrate_Lift);
             telemetry.update();
         }
-    }
-
-    double Wrap(double angle){
-        while(angle > 180){
-            angle -= 360;
-        }
-        while(angle < -180){
-           angle += 360;
-        }
-        return angle;
     }
 }

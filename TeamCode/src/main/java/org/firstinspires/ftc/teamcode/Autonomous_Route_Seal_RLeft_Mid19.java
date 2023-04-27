@@ -21,7 +21,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 @Autonomous(name="Autonomous_Route_Seal_RLeft_Mid19", group="Monkey")
-public class Autonomous_Route_Seal_RLeft_Mid19 extends LinearOpMode {
+public class Autonomous_Route_Seal_RLeft_Mid19 extends Robot {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftFrontMotor = null;
