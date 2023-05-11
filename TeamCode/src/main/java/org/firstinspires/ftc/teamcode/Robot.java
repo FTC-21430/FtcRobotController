@@ -9,6 +9,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvWebcam;
@@ -25,6 +28,12 @@ import org.openftc.easyopencv.OpenCvWebcam;
 public abstract class Robot extends LinearOpMode {
         IMU imu;
         // Declare OpMode members.
+        double Target = 0;
+    double error = 0;
+    double current = 0;
+    double drive;
+    double slide;
+    double turn;
         public ElapsedTime runtime = new ElapsedTime();
         public DcMotor leftFrontMotor = null;
         public DcMotor leftBackMotor = null;
@@ -39,6 +48,35 @@ public abstract class Robot extends LinearOpMode {
         public int MediumJunction = 1302;
     Robot.SamplePipeline pipeline =  new Robot.SamplePipeline();
     OpenCvWebcam webcam;
+    public void IMUstuffs(){
+        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+        AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
+        current = orientation.getYaw(AngleUnit.DEGREES);
+        telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", orientation.getYaw(AngleUnit.DEGREES));
+    }
+    public void IMUReset(){
+        telemetry.addData("Yaw", "Reset" + "ing\n");
+        imu.resetYaw();
+        Target = 0;
+    }
+    public void ProportionalFeedbackControl(){
+        error = Wrap((Target - current));
+        if (gamepad1.right_stick_x != 0){
+            imu.resetYaw();
+            Target = 0;
+        }
+
+        turn -= error/20;
+    }
+    double Wrap(double angle){
+        while(angle > 180){
+            angle -= 360;
+        }
+        while(angle < -180){
+            angle += 360;
+        }
+        return angle;
+    }
         public void CameraInit(){
 
             int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -63,6 +101,7 @@ public abstract class Robot extends LinearOpMode {
             });
 
         }
+
         public void Init() {
 
             imu = hardwareMap.get(IMU.class, "imu");

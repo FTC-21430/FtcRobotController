@@ -10,18 +10,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 public abstract class Teleop_class extends Robot {
     int LiftManual = 0;
     boolean calabrate_Lift = false;
-    double Target = 0;
-    double error = 0;
-    double current = 0;
+
     boolean leftTurnold = false;
     boolean rightTurnold = false;
     double leftFrontPower;
     double leftBackPower;
     double rightFrontPower;
     double rightBackPower;
-    double drive;
-    double slide;
-    double turn;
+
     double LiftAdd;
     boolean slowMode;
     boolean Intake;
@@ -50,35 +46,7 @@ public abstract class Teleop_class extends Robot {
     YawPitchRollAngles orientation;
     AngularVelocity angularVelocity;
 
-    public void IMUstuffs(){
-        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
-        current = orientation.getYaw(AngleUnit.DEGREES);
-        telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", orientation.getYaw(AngleUnit.DEGREES));
-    }
-    public void IMUReset(){
-        telemetry.addData("Yaw", "Reset" + "ing\n");
-        imu.resetYaw();
-        Target = 0;
-    }
-    public void ProportionalFeedbackControl(){
-        error = Wrap((Target - current));
-        if (gamepad1.right_stick_x != 0){
-            imu.resetYaw();
-            Target = 0;
-        }
 
-        turn -= error/20;
-    }
-    double Wrap(double angle){
-        while(angle > 180){
-            angle -= 360;
-        }
-        while(angle < -180){
-            angle += 360;
-        }
-        return angle;
-    }
     public void GridRunner(){
         if(gamepad1.dpad_up){
             drive = 1;
