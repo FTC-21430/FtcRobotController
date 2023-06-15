@@ -4,25 +4,30 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public abstract class AutoClass extends Teleop_class {
+
     //VARAIBLE ZONE!!!
     public double RobotAngle = 0;
     public double RobotX, RobotY;
     public double InitX, InitY;
     public double DForward, DSideways;
-    public double rotV = 537.7;
-    public double MMV = 96;
-    public double InchV = 23.4;
+    public double correctionFactor = 1.016723060905778;
+    public double ticksPerRevolution = 537.7;
+    public double MMPerRevolution = 96*Math.PI;
+    public double MMPerInch = 25.4;
     public double FrontLeft = 0;
     public double FrontRight=0;
     public double BackLeft=0;
     public double BackRight=0;
     public double FrontLeftOld,FrontRightOld,BackLeftOld,BackRightOld;
+    public float TESTfLeft, TESTfRight, TESTbLeft, TESTbRight;
+
+
 public float startOfsetDegrees = 0;
     public void RobotAngles(){
 
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        RobotAngle = orientation.getYaw(AngleUnit.DEGREES);
-        RobotAngle += startOfsetDegrees;
+        RobotAngle = 0;
+        //RobotAngle += startOfsetDegrees;
     }
     public void UpdateOdometry(){
         InitX = RobotX;
@@ -33,35 +38,46 @@ public float startOfsetDegrees = 0;
         RobotY = (InitY + DForward * Math.sin(RobotAngle))+ DSideways * Math.sin(RobotAngle + 90);
     }
     public void UpdateEncoders(){
-        FrontLeft = leftFrontMotor.getCurrentPosition();
-        FrontRight = rightFrontMotor.getCurrentPosition();
-        BackLeft =   leftBackMotor.getCurrentPosition();
-        BackRight =   rightBackMotor.getCurrentPosition();
+        FrontLeft = TESTfLeft;
+        FrontRight = TESTfRight;
+        BackLeft = TESTbLeft;
+        BackRight = TESTbRight;
 
         FrontLeft -= FrontLeftOld;
         BackLeft -= BackLeftOld;
         FrontRight -= FrontRightOld;
         BackRight -= BackRightOld;
 
-        FrontLeftOld = FrontLeft;
-        FrontRightOld = FrontRight;
-        BackLeftOld =  BackLeft;
-        BackRightOld = BackRight;
+        FrontLeftOld = 0;
+        FrontRightOld = 0;
+        BackLeftOld =  0;
+        BackRightOld = 0;
 
-        FrontLeft = FrontLeft/rotV;
-        FrontLeft = FrontLeft/MMV;
-        FrontLeft = FrontLeft/InchV;
+        FrontLeft = FrontLeft/ticksPerRevolution;
+        FrontLeft = MMPerRevolution*FrontLeft;
+        FrontLeft = FrontLeft/MMPerInch;
+        FrontLeft *= correctionFactor;
 
-        FrontRight = FrontRight/rotV;
-        FrontRight = FrontRight/MMV;
-        FrontRight = FrontRight/InchV;
+        FrontRight = FrontRight/ticksPerRevolution;
+        FrontRight = MMPerRevolution*FrontRight;
+        FrontRight = FrontRight/MMPerInch;
+        FrontRight *= correctionFactor;
 
-        BackRight = BackRight/rotV;
-        BackRight = BackRight/MMV;
-        BackRight = FrontRight/InchV;
+        BackRight = BackRight/ticksPerRevolution;
+        BackRight = MMPerRevolution*BackRight;
+        BackRight = BackRight/MMPerInch;
+        BackRight *= correctionFactor;
 
-        BackLeft = BackLeft/rotV;
-        BackLeft = BackLeft/MMV;
-        BackLeft = BackLeft/InchV;
+        BackLeft = BackLeft/ticksPerRevolution;
+        BackLeft = MMPerRevolution*BackLeft;
+        BackLeft = BackLeft/MMPerInch;
+        BackLeft *= correctionFactor;
+
+
+        telemetry.addData("left front inches: ", FrontLeft);
+        telemetry.addData("right front inches: ", FrontRight);
+        telemetry.addData("left back inches: ", BackLeft);
+        telemetry.addData("right back inches: ", BackRight);
+
     }
 }

@@ -46,7 +46,7 @@ public class BasicOpMode_Linear extends Teleop_class {
     // Wait for the game to start (driver presses PLAY)
     @Override
     public void runOpMode() {
-      Init();
+          Init();
       waitForStart();
       runtime.reset();
         // run until the end of the match (driver presses STOP)
