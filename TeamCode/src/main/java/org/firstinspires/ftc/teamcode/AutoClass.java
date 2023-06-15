@@ -22,12 +22,12 @@ public abstract class AutoClass extends Teleop_class {
     public float TESTfLeft, TESTfRight, TESTbLeft, TESTbRight;
 
 
-public float startOfsetDegrees = 0;
+public float startOfsetDegrees = 90;
     public void RobotAngles(){
 
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        RobotAngle = 0;
-        //RobotAngle += startOfsetDegrees;
+        RobotAngle = orientation.getYaw(AngleUnit.DEGREES);
+        RobotAngle += startOfsetDegrees;
     }
     public void UpdateOdometry(){
 
