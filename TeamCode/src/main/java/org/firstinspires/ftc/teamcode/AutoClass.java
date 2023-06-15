@@ -30,12 +30,13 @@ public float startOfsetDegrees = 0;
         //RobotAngle += startOfsetDegrees;
     }
     public void UpdateOdometry(){
+
+        DForward = (FrontRight + FrontLeft + BackRight + BackLeft)/4;
+        DSideways = (-FrontRight + FrontLeft + BackRight - BackLeft)/4;
+        RobotX = (InitX + DForward * Math.cos(RobotAngle)+ DSideways * Math.cos(RobotAngle + 90));
+        RobotY = (InitY + DForward * Math.sin(RobotAngle)+ DSideways * Math.sin(RobotAngle + 90));
         InitX = RobotX;
         InitY = RobotY;
-        DForward = (FrontRight + FrontLeft + BackRight + BackLeft)/4;
-        DSideways = (FrontRight + FrontLeft + BackRight - BackLeft)/4;
-        RobotX = (InitX + DForward * Math.cos(RobotAngle))+ DSideways * Math.cos(RobotAngle + 90);
-        RobotY = (InitY + DForward * Math.sin(RobotAngle))+ DSideways * Math.sin(RobotAngle + 90);
     }
     public void UpdateEncoders(){
         FrontLeft = TESTfLeft;
@@ -48,10 +49,10 @@ public float startOfsetDegrees = 0;
         FrontRight -= FrontRightOld;
         BackRight -= BackRightOld;
 
-        FrontLeftOld = 0;
-        FrontRightOld = 0;
-        BackLeftOld =  0;
-        BackRightOld = 0;
+        FrontLeftOld = TESTfLeft;
+        FrontRightOld = TESTfRight;
+        BackLeftOld =  TESTbLeft;
+        BackRightOld = TESTbRight;
 
         FrontLeft = FrontLeft/ticksPerRevolution;
         FrontLeft = MMPerRevolution*FrontLeft;
