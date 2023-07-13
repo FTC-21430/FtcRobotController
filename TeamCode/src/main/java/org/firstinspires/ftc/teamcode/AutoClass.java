@@ -30,11 +30,11 @@ public float startOfsetDegrees = 90;
         RobotAngle += startOfsetDegrees;
     }
     public void UpdateOdometry(){
-
+        RobotAngle = RobotAngle * Math.PI / 180;
         DForward = (FrontRight + FrontLeft + BackRight + BackLeft)/4;
         DSideways = (-FrontRight + FrontLeft + BackRight - BackLeft)/4;
-        RobotX = (InitX + DForward * Math.cos(RobotAngle)+ DSideways * Math.cos(RobotAngle + 90));
-        RobotY = (InitY + DForward * Math.sin(RobotAngle)+ DSideways * Math.sin(RobotAngle + 90));
+        RobotX = (InitX + DForward * Math.cos(RobotAngle)+ DSideways * Math.cos(RobotAngle + Math.PI/2));
+        RobotY = (InitY + DForward * Math.sin(RobotAngle)+ DSideways * Math.sin(RobotAngle + Math.PI/2));
         InitX = RobotX;
         InitY = RobotY;
     }
@@ -73,6 +73,9 @@ public float startOfsetDegrees = 90;
         BackLeft = MMPerRevolution*BackLeft;
         BackLeft = BackLeft/MMPerInch;
         BackLeft *= correctionFactor;
+
+
+
 
 
         telemetry.addData("left front inches: ", FrontLeft);
