@@ -6,8 +6,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 public abstract class AutoClass extends Teleop_class {
 
     //VARAIBLE ZONE!!!
-    public double RobotAngle = 0;
-    public double RobotX, RobotY;
+
+
     public double InitX, InitY;
     public double DForward, DSideways;
     public double correctionFactor = 1.016723060905778;
@@ -22,17 +22,17 @@ public abstract class AutoClass extends Teleop_class {
     public float TESTfLeft, TESTfRight, TESTbLeft, TESTbRight;
 
 
-public float startOfsetDegrees = 90;
+public double startOfsetRadians = Math.PI/2;
     public void RobotAngles(){
 
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        RobotAngle = orientation.getYaw(AngleUnit.DEGREES);
-        RobotAngle += startOfsetDegrees;
+    RobotAngle = orientation.getYaw(AngleUnit.RADIANS);
+        RobotAngle += startOfsetRadians;
     }
     public void UpdateOdometry(){
-        RobotAngle = RobotAngle * Math.PI / 180;
+
         DForward = (FrontRight + FrontLeft + BackRight + BackLeft)/4;
-        DSideways = (-FrontRight + FrontLeft + BackRight - BackLeft)/4;
+        DSideways = (-FrontRight + FrontLeft + BackRight - BackLeft)/4/1.5;
         RobotX = (InitX + DForward * Math.cos(RobotAngle)+ DSideways * Math.cos(RobotAngle + Math.PI/2));
         RobotY = (InitY + DForward * Math.sin(RobotAngle)+ DSideways * Math.sin(RobotAngle + Math.PI/2));
         InitX = RobotX;

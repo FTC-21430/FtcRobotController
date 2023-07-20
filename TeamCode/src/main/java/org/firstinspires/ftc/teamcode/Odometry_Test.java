@@ -20,6 +20,7 @@ rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        IMUReset();
         while (opModeIsActive()) {
             TESTfLeft = leftFrontMotor.getCurrentPosition();
             TESTfRight = rightFrontMotor.getCurrentPosition();
@@ -27,7 +28,9 @@ rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             TESTbRight = rightBackMotor.getCurrentPosition();
             UpdateControls();
             LiftControl();
-            ProportionalFeedbackControl();
+//          ProportionalFeedbackControl();
+            keepAtPoint(0,0);
+
             GridRunner();
             straferAlgorithm();
             UpdateEncoders();
@@ -35,6 +38,8 @@ rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             UpdateOdometry();
             speedControl();
             setMotorPower();
+//            IMUstuffs();
+//            ProportionalFeedbackControl();
             telemetry.addData("Y", RobotY);
             telemetry.addData("X", RobotX);
             telemetry.addData("Angle", RobotAngle);
