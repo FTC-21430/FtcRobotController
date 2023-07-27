@@ -28,10 +28,13 @@ rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             TESTbRight = rightBackMotor.getCurrentPosition();
             UpdateControls();
             LiftControl();
-//          ProportionalFeedbackControl();
-            keepAtPoint(0,0);
+            IMUstuffs();
+            keepAtPoint(24,0);
 
             GridRunner();
+
+            ProportionalFeedbackControl();
+
             straferAlgorithm();
             UpdateEncoders();
             RobotAngles();

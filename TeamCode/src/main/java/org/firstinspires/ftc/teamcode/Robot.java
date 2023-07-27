@@ -64,9 +64,9 @@ public abstract class Robot extends LinearOpMode {
     }
     public void ProportionalFeedbackControl(){
         error = Wrap((Target - current));
-        if (gamepad1.right_stick_x != 0){
+      if (gamepad1.right_stick_x != 0){
             imu.resetYaw();
-            Target = 0;
+           Target = 0;
         }
 
         turn -= error/20;
@@ -80,29 +80,6 @@ public abstract class Robot extends LinearOpMode {
         }
         return angle;
     }
-
-    public void keepAtPoint(double Tx, double Ty) {
-        distanceX = RobotX - Tx;
-        distanceY = RobotY - Ty;
-
-        PowerX = -distanceX * 1;
-        PowerY = -distanceY * 1;
-
-        PowerF = PowerY * Math.sin(RobotAngle) + PowerX * Math.cos(RobotAngle);
-        PowerS = PowerX * Math.sin(RobotAngle) - PowerY * Math.cos(RobotAngle);
-
-
-
-
-    }
-
-
-
-
-
-
-
-
         public void CameraInit(){
 
             int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());

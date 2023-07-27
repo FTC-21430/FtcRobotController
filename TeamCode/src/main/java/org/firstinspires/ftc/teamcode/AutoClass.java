@@ -22,7 +22,7 @@ public abstract class AutoClass extends Teleop_class {
     public float TESTfLeft, TESTfRight, TESTbLeft, TESTbRight;
 
 
-public double startOfsetRadians = Math.PI/2;
+public double startOfsetRadians = 0;
     public void RobotAngles(){
 
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
@@ -32,12 +32,50 @@ public double startOfsetRadians = Math.PI/2;
     public void UpdateOdometry(){
 
         DForward = (FrontRight + FrontLeft + BackRight + BackLeft)/4;
-        DSideways = (-FrontRight + FrontLeft + BackRight - BackLeft)/4/1.5;
-        RobotX = (InitX + DForward * Math.cos(RobotAngle)+ DSideways * Math.cos(RobotAngle + Math.PI/2));
-        RobotY = (InitY + DForward * Math.sin(RobotAngle)+ DSideways * Math.sin(RobotAngle + Math.PI/2));
+        DSideways = (-FrontRight + FrontLeft + BackRight - BackLeft)/4/1.2;
+        RobotX = (InitX - DForward * Math.sin(RobotAngle)+ DSideways * Math.cos(RobotAngle));
+        RobotY = (InitY + DForward * Math.cos(RobotAngle)+ DSideways * Math.sin(RobotAngle));
         InitX = RobotX;
         InitY = RobotY;
     }
+    public void keepAtPoint(double Tx, double Ty) {
+
+        distanceX = RobotX - Tx;
+        distanceY = RobotY - Ty;
+
+        PowerX = -distanceX * .55;
+        PowerY = -distanceY * .4;
+
+        PowerS = PowerX * Math.cos(RobotAngle) - PowerY * Math.sin(RobotAngle);
+        PowerF = PowerX * Math.sin(RobotAngle) + PowerY * Math.cos(RobotAngle);
+
+        if (PowerF >= 1 ) PowerF = 1;
+        if (PowerF <= -1) PowerF = -1;
+        if (PowerS >= 1 ) PowerS = 1;
+        if (PowerS <= -1) PowerS = -1;
+
+        drive = PowerF;
+        slide = PowerS;
+        straferAlgorithm();
+
+
+    }
+    public void RunToPoint(double TargetX, double TargetY){
+        while()
+        {
+            IMUstuffs();
+            keepAtPoint(TargetX, TargetY);
+            ProportionalFeedbackControl();
+            UpdateEncoders();
+            UpdateOdometry();
+            straferAlgorithm();
+            setMotorPower();
+
+
+         }
+
+    }
+
     public void UpdateEncoders(){
         FrontLeft = TESTfLeft;
         FrontRight = TESTfRight;
