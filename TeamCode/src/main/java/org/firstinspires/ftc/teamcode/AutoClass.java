@@ -18,6 +18,7 @@ public abstract class AutoClass extends Teleop_class {
     public double FrontRight=0;
     public double BackLeft=0;
     public double BackRight=0;
+    public double randomDouble;
     public double FrontLeftOld,FrontRightOld,BackLeftOld,BackRightOld;
     public float TESTfLeft, TESTfRight, TESTbLeft, TESTbRight;
 
@@ -46,14 +47,15 @@ public double startOfsetRadians = 0;
         PowerX = -distanceX * .55;
         PowerY = -distanceY * .4;
 
-        PowerS = PowerX * Math.cos(RobotAngle) - PowerY * Math.sin(RobotAngle);
-        PowerF = PowerX * Math.sin(RobotAngle) + PowerY * Math.cos(RobotAngle);
+        PowerS = PowerX * Math.cos(-RobotAngle) - PowerY * Math.sin(-RobotAngle);
+        PowerF = PowerX * Math.sin(-RobotAngle) + PowerY * Math.cos(-RobotAngle);
 
-        if (PowerF >= 1 ) PowerF = 1;
-        if (PowerF <= -1) PowerF = -1;
-        if (PowerS >= 1 ) PowerS = 1;
-        if (PowerS <= -1) PowerS = -1;
 
+        randomDouble = Math.max(Math.abs(PowerS),Math.abs(PowerF));
+        if (randomDouble >= 1){
+            PowerF/= randomDouble;
+            PowerS/= randomDouble;
+        }
         drive = PowerF;
         slide = PowerS;
         straferAlgorithm();
@@ -61,7 +63,7 @@ public double startOfsetRadians = 0;
 
     }
     public void RunToPoint(double TargetX, double TargetY){
-        while()
+        //while()
         {
             IMUstuffs();
             keepAtPoint(TargetX, TargetY);

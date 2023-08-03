@@ -29,11 +29,13 @@ rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             UpdateControls();
             LiftControl();
             IMUstuffs();
-            keepAtPoint(24,0);
+            Target = 90;
+            keepAtPoint(24,24);
 
             GridRunner();
 
             ProportionalFeedbackControl();
+
 
             straferAlgorithm();
             UpdateEncoders();
