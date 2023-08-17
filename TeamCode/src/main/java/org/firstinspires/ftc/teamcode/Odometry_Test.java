@@ -29,14 +29,15 @@ rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             UpdateControls();
             LiftControl();
             IMUstuffs();
-            Target = 90;
-            keepAtPoint(24,24);
-
+            RunToPoint(24,24);
+          leftFrontMotor.setPower(0);
+          leftBackMotor.setPower(0);
+          rightFrontMotor.setPower(0);
+          rightBackMotor.setPower(0);
+            sleep(3000);
+            RunToPoint(0,0);
             GridRunner();
-
             ProportionalFeedbackControl();
-
-
             straferAlgorithm();
             UpdateEncoders();
             RobotAngles();

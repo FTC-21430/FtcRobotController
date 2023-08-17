@@ -18,9 +18,10 @@ public abstract class AutoClass extends Teleop_class {
     public double FrontRight=0;
     public double BackLeft=0;
     public double BackRight=0;
-    public double randomDouble;
+    public double scalingDouble;
     public double FrontLeftOld,FrontRightOld,BackLeftOld,BackRightOld;
     public float TESTfLeft, TESTfRight, TESTbLeft, TESTbRight;
+
 
 
 public double startOfsetRadians = 0;
@@ -51,10 +52,10 @@ public double startOfsetRadians = 0;
         PowerF = PowerX * Math.sin(-RobotAngle) + PowerY * Math.cos(-RobotAngle);
 
 
-        randomDouble = Math.max(Math.abs(PowerS),Math.abs(PowerF));
-        if (randomDouble >= 1){
-            PowerF/= randomDouble;
-            PowerS/= randomDouble;
+        scalingDouble = Math.max(Math.abs(PowerS),Math.abs(PowerF));
+        if (scalingDouble >= 1){
+            PowerF/= scalingDouble;
+            PowerS/= scalingDouble;
         }
         drive = PowerF;
         slide = PowerS;
@@ -63,8 +64,12 @@ public double startOfsetRadians = 0;
 
     }
     public void RunToPoint(double TargetX, double TargetY){
-        //while()
+        while(distanceCircle(TargetX,TargetY) > 1 & opModeIsActive())
         {
+            TESTfLeft = leftFrontMotor.getCurrentPosition();
+            TESTfRight = rightFrontMotor.getCurrentPosition();
+            TESTbLeft = leftBackMotor.getCurrentPosition();
+            TESTbRight = rightBackMotor.getCurrentPosition();
             IMUstuffs();
             keepAtPoint(TargetX, TargetY);
             ProportionalFeedbackControl();
@@ -76,6 +81,9 @@ public double startOfsetRadians = 0;
 
          }
 
+    }
+    public double distanceCircle(double x, double y){
+        return(Math.sqrt((x-RobotY)*(x-RobotY) + (RobotX-y)*(RobotX-y)));
     }
 
     public void UpdateEncoders(){
