@@ -64,22 +64,38 @@ public double startOfsetRadians = 0;
 
     }
     public void RunToPoint(double TargetX, double TargetY){
-        while(distanceCircle(TargetX,TargetY) > 1 & opModeIsActive())
+
+        while(distanceCircle(TargetX,TargetY) > 0.1 & opModeIsActive())
         {
             TESTfLeft = leftFrontMotor.getCurrentPosition();
             TESTfRight = rightFrontMotor.getCurrentPosition();
             TESTbLeft = leftBackMotor.getCurrentPosition();
             TESTbRight = rightBackMotor.getCurrentPosition();
+            //UpdateControls();
+//            drive = -gamepad1.left_stick_y;
+//            slide = gamepad1.left_stick_x;
+           turn = 0;
+            LiftControl();
             IMUstuffs();
-            keepAtPoint(TargetX, TargetY);
+
+            RobotAngles();
             ProportionalFeedbackControl();
             UpdateEncoders();
+
             UpdateOdometry();
+            keepAtPoint(TargetX, TargetY);
+            GridRunner();
+            speedControl();
             straferAlgorithm();
+
             setMotorPower();
 
 
          }
+        leftFrontMotor.setPower(0);
+        leftBackMotor.setPower(0);
+         rightFrontMotor.setPower(0);
+          rightBackMotor.setPower(0);
 
     }
     public double distanceCircle(double x, double y){

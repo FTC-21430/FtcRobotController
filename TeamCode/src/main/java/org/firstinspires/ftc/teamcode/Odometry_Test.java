@@ -20,32 +20,34 @@ rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         IMUReset();
         while (opModeIsActive()) {
-            TESTfLeft = leftFrontMotor.getCurrentPosition();
-            TESTfRight = rightFrontMotor.getCurrentPosition();
-            TESTbLeft = leftBackMotor.getCurrentPosition();
-            TESTbRight = rightBackMotor.getCurrentPosition();
-            UpdateControls();
-            LiftControl();
-            IMUstuffs();
-            RunToPoint(24,24);
-          leftFrontMotor.setPower(0);
-          leftBackMotor.setPower(0);
-          rightFrontMotor.setPower(0);
-          rightBackMotor.setPower(0);
-            sleep(3000);
-            RunToPoint(0,0);
-            GridRunner();
-            ProportionalFeedbackControl();
-            straferAlgorithm();
-            UpdateEncoders();
-            RobotAngles();
-            UpdateOdometry();
-            speedControl();
-            setMotorPower();
+//            TESTfLeft = leftFrontMotor.getCurrentPosition();
+//            TESTfRight = rightFrontMotor.getCurrentPosition();
+//            TESTbLeft = leftBackMotor.getCurrentPosition();
+//            TESTbRight = rightBackMotor.getCurrentPosition();
+//            UpdateControls();
+//            LiftControl();
 //            IMUstuffs();
+            RunToPoint(24,24);
+//
+
+           // RunToPoint(0,0);
+//            GridRunner();
 //            ProportionalFeedbackControl();
+//            straferAlgorithm();
+//            UpdateEncoders();
+            RobotAngles();
+//            UpdateOdometry();
+//            speedControl();
+//            setMotorPower();
+//            IMUstuffs();
+//
             telemetry.addData("Y", RobotY);
             telemetry.addData("X", RobotX);
             telemetry.addData("Angle", RobotAngle);

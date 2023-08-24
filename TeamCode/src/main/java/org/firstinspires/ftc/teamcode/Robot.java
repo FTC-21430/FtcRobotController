@@ -105,6 +105,11 @@ public abstract class Robot extends LinearOpMode {
 
         }
 
+//        public void autoWait(int time){
+//         while(time > -1){
+//        wait(1);
+//        time -= 1;
+//        }
         public void Init() {
 
             imu = hardwareMap.get(IMU.class, "imu");
