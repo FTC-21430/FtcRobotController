@@ -65,8 +65,14 @@ public double startOfsetRadians = 0;
     }
     public void RunToPoint(double TargetX, double TargetY){
 
-        while(distanceCircle(TargetX,TargetY) > 0.1 & opModeIsActive())
+        while(distanceCircle(TargetX,TargetY) > 0.2 & opModeIsActive())
         {
+            telemetry.addData("distance",distanceCircle(TargetX,TargetY));
+            telemetry.addData("Y", RobotY);
+            telemetry.addData("X", RobotX);
+            telemetry.addData("Angle", RobotAngle);
+            telemetry.addData( "a motor", FrontLeft);
+            telemetry.update();
             TESTfLeft = leftFrontMotor.getCurrentPosition();
             TESTfRight = rightFrontMotor.getCurrentPosition();
             TESTbLeft = leftBackMotor.getCurrentPosition();
@@ -85,9 +91,12 @@ public double startOfsetRadians = 0;
             UpdateOdometry();
             keepAtPoint(TargetX, TargetY);
             GridRunner();
-            speedControl();
+           
             straferAlgorithm();
-
+            leftFrontPower=leftFrontPower / 2;
+            leftBackPower = leftBackPower / 2;
+            rightFrontPower = rightFrontPower / 2;
+            rightBackPower = rightBackPower / 2;
             setMotorPower();
 
 
@@ -99,7 +108,7 @@ public double startOfsetRadians = 0;
 
     }
     public double distanceCircle(double x, double y){
-        return(Math.sqrt((x-RobotY)*(x-RobotY) + (RobotX-y)*(RobotX-y)));
+        return(Math.sqrt((x-RobotX)*(x-RobotX) + (y-RobotY)*(y-RobotY)));
     }
 
     public void UpdateEncoders(){
