@@ -91,7 +91,7 @@ public double startOfsetRadians = 0;
             UpdateOdometry();
             keepAtPoint(TargetX, TargetY);
             GridRunner();
-           
+
             straferAlgorithm();
             leftFrontPower=leftFrontPower / 2;
             leftBackPower = leftBackPower / 2;
